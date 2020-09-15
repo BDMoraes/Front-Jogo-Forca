@@ -5,4 +5,4 @@ new Vue({
     render(createElement) {
         return createElement(App);
     }
-}).$mount('#app')
+}).$mount('#app');

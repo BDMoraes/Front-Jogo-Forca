@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <h1>Jogo da forca</h1>
+      <h1>Jogo da forca aqui</h1>
   </div>
 </template>
 
