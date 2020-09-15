@@ -14,9 +14,7 @@
         <input type="password" placeholder="Enter Password" name="psw" required />
 
         <button type="submit">Login</button>
-        <div class="container" style="background-color:#f1f1f1">
-          <button type="button" class="cancelbtn">Cancel</button>
-        </div>
+        <button type="button" class="cancelbtn">Cancel</button>
       </div>
     </form>
   </div>
