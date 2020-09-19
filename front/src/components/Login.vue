@@ -2,28 +2,20 @@
 <body>
   <img class="logo" src="../assets/img/LOGO.png" />
   <div class="card">
-    <form method="POST" @submit="formSubmit">
+    <form @submit="formSubmit">
       <div class="form-group">
         <label for="exampleInputEmail1">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          id="InputEmail"
-          aria-describedby="emailHelp"
-          v-model="InputEmail"
-        />
+        <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" v-model="InputEmail"/>
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Senha</label>
         <input type="password" class="form-control" id="InputPass" v-model="InputPass" />
       </div>
-      <button type="submit" class="btn btn-primary justify-content-center btsubtmit">Login</button>
+      <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary" id="btsubmit">Login</button>
+      </div>
     </form>
   </div>
-  <strong>Output:</strong>
-  <pre>
-    {{output}}
- </pre>
 </body>
 </template>
 
@@ -36,8 +28,7 @@ export default {
   data() {
     return {
       InputEmail: "",
-      InputPass: "",
-      output: "",
+      InputPass: ""
     };
   },
   methods: {
@@ -80,7 +71,7 @@ body {
   width: 600px;
 }
 
-.btsubmit {
+#btsubmit {
   background-color: orange;
 }
 </style>
