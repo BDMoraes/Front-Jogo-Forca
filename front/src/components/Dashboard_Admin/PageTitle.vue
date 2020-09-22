@@ -5,26 +5,24 @@
       {{main}}
     </h1>
     <h2>{{sub}}</h2>
-    <hr>
+    <hr />
   </div>
 </template>
 
 <script>
 export default {
-    name:"PageTitle",
-    props: ["icon", "main", "sub"]
+  name: "PageTitle",
+  props: ["icon", "main", "sub"],
 };
 </script>
 
 <style>
-.page-title h1{
-    margin: 0px;
-
+.page-title h1 {
+  margin: 0px;
 }
-.page-title h2{
-    color: #777;
-    margin-top: 5px;
-    font-size: 1.5rem;
-    
+.page-title h2 {
+  color: #777;
+  margin-top: 5px;
+  font-size: 1.5rem;
 }
 </style>
