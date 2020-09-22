@@ -1,9 +1,6 @@
 <template>
-  <!-- <div id="app">
-    <Login/>
-  </div>-->
-  <div id="app">
-    <Header />
+  <div id="app" :class="{'hide-menu': !isMenuVisible}">
+    <Header title="Jogo da forca do Pitágoras" :hideToggle="false" :hideUserDropdown="false"/>
     <Menu />
     <Content />
     <Footer />
@@ -11,7 +8,7 @@
 </template>
 
 <script>
-//import Login from "./components/Login.vue";
+import { mapState } from "vuex";
 import Header from "./components/Dashboard_Admin/Header";
 import Menu from "./components/Dashboard_Admin/Menu";
 import Content from "./components/Dashboard_Admin/Content";
@@ -19,9 +16,8 @@ import Footer from "./components/Dashboard_Admin/Footer";
 
 export default {
   name: "App",
-  components:
-    //Login
-    { Header, Menu, Content, Footer },
+  components:{ Header, Menu, Content, Footer },
+  computed: mapState(['isMenuVisible'])
 };
 </script>
 
@@ -34,9 +30,16 @@ body {
   display: grid;
   grid-template-rows: 60px 1fr 40px;
   grid-template-columns: 300px 1fr;
-  grid-template-areas: 
-        "header header"
-        "menu content"
-        "menu footer";
+  grid-template-areas:
+    "header header"
+    "menu content"
+    "menu footer";
+}
+
+#app.hide-menu {
+  grid-template-areas:
+    "header header"
+    "content content"
+    "footer footer";
 }
 </style>
