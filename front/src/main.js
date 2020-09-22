@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios';
 import 'font-awesome/css/font-awesome.css';
 import store from './config/store';
 import router from './config/router';
+import './config/bootstrap';
 
 
 Vue.use(VueAxios, axios);

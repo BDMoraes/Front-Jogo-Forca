@@ -37,6 +37,10 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: fontDalek;
+  src: url("../../assets/fonts/DALEKPINPOINTBOLD.TTF");
+}
 .header {
   background: linear-gradient(to right, orangered, orange);
   grid-area: header;
@@ -46,6 +50,7 @@ export default {
   align-items: center;
 }
 .title {
+  font-family: fontDalek;
   font-size: 2rem;
   color: black;
   font-weight: 100;
@@ -64,7 +69,7 @@ export default {
 header.header > a.toggle {
   width: 60px;
   height: 300%;
-  color: #fff;
+  color: black;
   justify-self: flex-start;
   text-decoration: none;
   display: flex;
