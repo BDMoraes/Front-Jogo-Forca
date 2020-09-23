@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <span>Trabalho Modelagem de Software</span>
+    <span>Modelagem de Software - 6N 2020/2</span>
   </footer>
 </template>
 
@@ -11,13 +11,19 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: fontDalek;
+  src: url("../../assets/fonts/DALEKPINPOINTBOLD.TTF");
+}
 .footer {
+  font-family: fontDalek;
   grid-area: footer;
-  background-color: #ddd;
-  color: orange;
+  background: linear-gradient(to right, orangered, orange);
+  color: black;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  text-align: center;
+  justify-content: center;
   padding-right: 10px;
 }
 </style>

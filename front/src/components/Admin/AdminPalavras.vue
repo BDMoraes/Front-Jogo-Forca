@@ -42,6 +42,7 @@
 <script>
 import { baseApiUrl, showError } from "@/global";
 import axios from "axios";
+
 export default {
   name: "Adminpalavras",
   data: function () {
@@ -52,6 +53,7 @@ export default {
       fields: [
         { key: "id", label: "Código", sortable: true },
         { key: "name", label: "Nome", sortable: true },
+        { key: 'category', label: 'Categoria', sortable: true },
         { key: "actions", label: "Ações" },
       ],
     };
@@ -62,7 +64,7 @@ export default {
       axios.get(url).then((res) => {
         // this.palavras = res.data
         this.palavras = res.data.map((palavra) => {
-          return { ...palavra, value: palavra.id, text: palavra.path };
+          return { ...palavra, value: palavra.id, /*text: palavra.path*/ };
         });
       });
     },
