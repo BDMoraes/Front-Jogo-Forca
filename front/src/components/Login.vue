@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { baseApiUrl, showError } from "@/global";
+
 export default {
   name: "Login",
   mounted() {
@@ -36,7 +38,7 @@ export default {
       e.preventDefault();
       let currentObj = this;
       this.axios
-        .post("http://localhost:8000/yourPostApi", {
+        .post(baseApiUrl, {
           name: this.InputEmail,
           pass: this.InputPass,
         })
