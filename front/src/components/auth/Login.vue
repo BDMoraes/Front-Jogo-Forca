@@ -1,6 +1,6 @@
 <template>
 <body>
-  <img class="logo" src="../assets/img/LOGO.png" />
+  <img class="logo" src="../../assets/img/LOGO.png" />
   <div class="card">
     <form @submit="formSubmit">
       <div class="form-group">
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { baseApiUrl, showError } from "@/global";
+import { baseApiUrl} from "@/global";
 
 export default {
   name: "Login",
@@ -55,7 +55,7 @@ export default {
 
 <style>
 body {
-  background-image: url("../assets/img/bg.jpg");
+  background-image: url("../../assets/img/bg.jpg");
 }
 
 .card {
