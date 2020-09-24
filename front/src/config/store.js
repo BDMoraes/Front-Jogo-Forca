@@ -9,11 +9,9 @@ export default new Vuex.Store({
         isMenuVisible: false,
         user: null
         /*{
-        name: "Bruno",
-        email: "admin@rede.ulbra.br"
-    }*/
-
-
+            name: "Bruno",
+            email: "admin@rede.ulbra.br"
+        }*/
     },
     mutations: {
         toggleMenu(state, isVisible) {

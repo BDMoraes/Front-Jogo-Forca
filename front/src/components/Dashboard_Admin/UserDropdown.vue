@@ -1,9 +1,9 @@
 <template>
   <div class="user-dropdown">
     <div class="user-button">
-      <span class="d-none d-sm-block">{{user.name}}</span>
+      <span class="d-none d-sm-block">{{ user.username }}</span>
       <div class="user-dropdown-img">
-        <Gravatar :email="user.email" alt="User" />
+        <Gravatar :email="user.username" alt="User" />
       </div>
       <i class="fa fa-angle-down"></i>
     </div>
@@ -11,7 +11,7 @@
       <router-link to="/admin">
         <i class="fa fa-cogs">Administração</i>
       </router-link>
-      <a href class="fa fa-sign-out">
+      <a href @click.prevent="logout" class="fa fa-sign-out">
         <i>Sair</i>
       </a>
     </div>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { userKey } from "@/global";
 import { mapState } from "vuex";
 import Gravatar from "vue-gravatar";
 
@@ -26,6 +27,13 @@ export default {
   name: "UserDropdown",
   components: { Gravatar },
   computed: mapState(["user"]),
+  methods: {
+    logout() {
+      localStorage.removeItem(userKey);
+      this.$store.commit("setUser", null);
+      this.$router.push({ name: "auth" });
+    },
+  },
 };
 </script>
 
