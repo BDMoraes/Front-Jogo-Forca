@@ -17,6 +17,9 @@ import router from './config/router';
 Vue.use(VueAxios, axios);
 
 new Vue({
+  beforeCreate(){
+      this.$store.commit("init");
+  },
   store,
   router,
   render: h => h(App),

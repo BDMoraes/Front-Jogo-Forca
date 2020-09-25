@@ -35,7 +35,9 @@ export default {
   methods: {
     signin() {
       axios
-        .post(`${baseApiUrl}/oauth/token`, this.user)
+        .post(`${baseApiUrl}/oauth/token`, {...this.user, grant_type: "password", client_id: 1,
+        client_secret:"gyQmIEJllLaFVrhkfNH4h2BGnZUneOBin0VFQ0gj"
+        })
         .then((res) => {
           this.$store.commit("setUser", res.data);
           localStorage.setItem(userKey, JSON.stringify(res.data));

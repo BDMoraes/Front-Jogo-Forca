@@ -50,11 +50,11 @@ export default {
   },
   methods: {
     loadCategorias() {
-      const url = `${baseApiUrl}/categorias`;
+      const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
         // this.categorias = res.data
-        this.categorias = res.data.map((categoria) => {
-          return { ...categoria, value: categoria.id, text: categoria.path };
+        this.categorias = res.data.data.map((categoria) => {
+          return { ...categoria, value: categoria.id};
         });
       });
     },
@@ -66,7 +66,7 @@ export default {
     save() {
       const method = this.categoria.id ? "put" : "post";
       const id = this.categoria.id ? `/${this.categoria.id}` : "";
-      axios[method](`${baseApiUrl}/categorias${id}`, this.categoria)
+      axios[method](`${baseApiUrl}/api/category${id}`, this.categoria)
         .then(() => {
           this.$toasted.global.defaultSuccess();
           this.reset();
@@ -76,7 +76,7 @@ export default {
     remove() {
       const id = this.categoria.id;
       axios
-        .delete(`${baseApiUrl}/categorias/${id}`)
+        .delete(`${baseApiUrl}/api/category/${id}`)
         .then(() => {
           this.$toasted.global.defaultSuccess();
           this.reset();
