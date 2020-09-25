@@ -38,7 +38,7 @@ export default new Vuex.Store({
             state.user = user
             setUser(state, user)
         },
-        init(){
+        init() {
             const user = JSON.parse(localStorage.getItem(userKey));
             setUser(this.state, user);
             console.log(user.access_token);

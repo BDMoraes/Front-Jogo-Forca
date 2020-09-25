@@ -12,13 +12,11 @@ import store from './config/store';
 import './config/msg';
 import router from './config/router';
 
-
-
 Vue.use(VueAxios, axios);
 
 new Vue({
-  beforeCreate(){
-      this.$store.commit("init");
+  beforeCreate() {
+    this.$store.commit("init");
   },
   store,
   router,

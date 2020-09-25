@@ -12,8 +12,12 @@
           placeholder="Informe o Nome da Categoria..."
         />
       </b-form-group>
-      <b-button variant="primary" v-if="mode === 'save'" @click="save">Salvar</b-button>
-      <b-button variant="danger" v-if="mode === 'remove'" @click="remove">Excluir</b-button>
+      <b-button variant="primary" v-if="mode === 'save'" @click="save"
+        >Salvar</b-button
+      >
+      <b-button variant="danger" v-if="mode === 'remove'" @click="remove"
+        >Excluir</b-button
+      >
       <b-button class="ml-2" @click="reset">Cancelar</b-button>
     </b-form>
     <hr />
@@ -52,9 +56,8 @@ export default {
     loadCategorias() {
       const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
-        // this.categorias = res.data
         this.categorias = res.data.data.map((categoria) => {
-          return { ...categoria, value: categoria.id};
+          return { ...categoria, value: categoria.id };
         });
       });
     },
