@@ -1,10 +1,7 @@
 <template>
   <header class="header">
-    <a class="toggle">
-      <i class="fa fa-lg" :class="icon" @click="toggleMenu" v-if="!hideToggle"></i>
-    </a>
     <h1 class="title">
-      <router-link to="/">{{ title }}</router-link>
+      {{ title }}
     </h1>
     <UserDropdown v-if="!hideUserDropdown" />
   </header>
@@ -20,18 +17,7 @@ export default {
   },
   props: {
     title: String,
-    hideToggle: Boolean,
     hideUserDropdown: Boolean,
-  },
-  computed: {
-    icon() {
-      return "fa fa-bars";
-    },
-  },
-  methods: {
-    toggleMenu() {
-      this.$store.commit("toggleMenu");
-    },
   },
 };
 </script>
@@ -64,21 +50,5 @@ export default {
 .title a:hover {
   color: black;
   text-decoration: none;
-}
-
-header.header > a.toggle {
-  width: 60px;
-  height: 300%;
-  color: black;
-  justify-self: flex-start;
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-header.header > a.toggle:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  height: 300%;
 }
 </style>
