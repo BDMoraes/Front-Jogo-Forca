@@ -1,9 +1,9 @@
 <template>
   <div class="user-dropdown">
     <div class="user-button">
-      <span class="d-none d-sm-block">{{ user.name }}</span>
+      <span class="d-none d-sm-block">{{ user.username }}</span>
       <div class="user-dropdown-img">
-        <Gravatar :username="user.name" alt="User" />
+        <Gravatar :username="user.username" alt="User" />
       </div>
       <i class="fa fa-angle-down"></i>
     </div>
