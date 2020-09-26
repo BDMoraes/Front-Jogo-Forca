@@ -12,23 +12,33 @@
           placeholder="Informe a Palavra..."
         />
       </b-form-group>
-      <b-form-group label="Categoria Pai:" label-for="palavra-parentId">
+      <b-form-group
+        v-if="mode === 'save'"
+        label="Categoria:"
+        label-for="palavra.categoria"
+      >
         <b-form-select
-          v-if="mode === 'save'"
-          id="palavra-parentId"
-          :options="palavras"
-          v-model="palavra.parentId"
+          id="palavra-categoria"
+          :options="categorias"
+          v-model="palavra.categoria"
         />
-        <b-form-input v-else id="palavra-parentId" type="text" v-model="palavra.path" readonly />
       </b-form-group>
-      <b-button variant="primary" v-if="mode === 'save'" @click="save">Salvar</b-button>
-      <b-button variant="danger" v-if="mode === 'remove'" @click="remove">Excluir</b-button>
+      <b-button variant="primary" v-if="mode === 'save'" @click="save"
+        >Salvar</b-button
+      >
+      <b-button variant="danger" v-if="mode === 'remove'" @click="remove"
+        >Excluir</b-button
+      >
       <b-button class="ml-2" @click="reset">Cancelar</b-button>
     </b-form>
     <hr />
     <b-table hover striped :items="palavras" :fields="fields">
       <template slot="cell(actions)" slot-scope="data">
-        <b-button variant="warning" @click="loadPalavra(data.item)" class="espaco_bts">
+        <b-button
+          variant="warning"
+          @click="loadPalavra(data.item)"
+          class="espaco_bts"
+        >
           <i class="fa fa-pencil"></i>
         </b-button>
         <b-button variant="danger" @click="loadPalavra(data.item, 'remove')">
@@ -54,7 +64,7 @@ export default {
       fields: [
         { key: "id", label: "Código", sortable: true },
         { key: "name", label: "Nome", sortable: true },
-        { key: 'category', label: 'Categoria', sortable: true },
+        { key: "category", label: "Categoria", sortable: true },
         { key: "actions", label: "Ações" },
       ],
     };
@@ -64,7 +74,7 @@ export default {
       const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
         this.categorias = res.data.data.map((categoria) => {
-          return { ...categoria, value: categoria.id };
+          return { value: categoria.id, text: categoria.name };
         });
       });
     },
@@ -72,7 +82,7 @@ export default {
       const url = `${baseApiUrl}/palavras`;
       axios.get(url).then((res) => {
         this.palavras = res.data.data.map((palavra) => {
-          return { ...palavra, value: palavra.id};
+          return { ...palavra, value: palavra.id };
         });
       });
     },
@@ -107,13 +117,14 @@ export default {
     },
   },
   mounted() {
+    this.loadCategorias();
     this.loadPalavras();
   },
 };
 </script>
 
 <style>
-.espaco_bts{
+.espaco_bts {
   margin-right: 5px;
 }
 </style>

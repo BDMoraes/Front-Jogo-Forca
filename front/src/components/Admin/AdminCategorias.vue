@@ -23,7 +23,11 @@
     <hr />
     <b-table hover striped :items="categorias" :fields="fields">
       <template slot="cell(actions)" slot-scope="data">
-        <b-button variant="warning" @click="loadCategoria(data.item)" class="espaco_bts">
+        <b-button
+          variant="warning"
+          @click="loadCategoria(data.item)"
+          class="espaco_bts"
+        >
           <i class="fa fa-pencil" color="red"></i>
         </b-button>
         <b-button variant="danger" @click="loadCategoria(data.item, 'remove')">
@@ -57,7 +61,7 @@ export default {
       const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
         this.categorias = res.data.data.map((categoria) => {
-          return { ...categoria, value: categoria.id};
+          return { ...categoria, value: categoria.id };
         });
       });
     },
@@ -98,7 +102,7 @@ export default {
 </script>
 
 <style>
-.espaco_bts{
+.espaco_bts {
   margin-right: 5px;
 }
 </style>
