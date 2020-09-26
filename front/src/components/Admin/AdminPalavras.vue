@@ -27,8 +27,8 @@
     </b-form>
     <hr />
     <b-table hover striped :items="palavras" :fields="fields">
-      <template slot="actions" slot-scope="data">
-        <b-button variant="warning" @click="loadPalavra(data.item)" class="mr-2">
+      <template slot="cell(actions)" slot-scope="data">
+        <b-button variant="warning" @click="loadPalavra(data.item)" class="espaco_bts">
           <i class="fa fa-pencil"></i>
         </b-button>
         <b-button variant="danger" @click="loadPalavra(data.item, 'remove')">
@@ -50,6 +50,7 @@ export default {
       mode: "save",
       palavra: {},
       palavras: [],
+      categorias: [],
       fields: [
         { key: "id", label: "Código", sortable: true },
         { key: "name", label: "Nome", sortable: true },
@@ -59,12 +60,19 @@ export default {
     };
   },
   methods: {
+    loadCategorias() {
+      const url = `${baseApiUrl}/api/category`;
+      axios.get(url).then((res) => {
+        this.categorias = res.data.data.map((categoria) => {
+          return { ...categoria, value: categoria.id };
+        });
+      });
+    },
     loadPalavras() {
       const url = `${baseApiUrl}/palavras`;
       axios.get(url).then((res) => {
-        // this.palavras = res.data
-        this.palavras = res.data.map((palavra) => {
-          return { ...palavra, value: palavra.id, /*text: palavra.path*/ };
+        this.palavras = res.data.data.map((palavra) => {
+          return { ...palavra, value: palavra.id};
         });
       });
     },
@@ -105,4 +113,7 @@ export default {
 </script>
 
 <style>
+.espaco_bts{
+  margin-right: 5px;
+}
 </style>

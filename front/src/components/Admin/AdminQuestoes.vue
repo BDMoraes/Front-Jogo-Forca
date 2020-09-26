@@ -102,7 +102,7 @@ export default {
       axios.get(url).then((res) => {
         // this.questaos = res.data
         this.questaos = res.data.map((questao) => {
-          return { ...questao, value: questao.id, text: questao.path };
+          return { ...questao, value: questao.id};
         });
       });
     },
