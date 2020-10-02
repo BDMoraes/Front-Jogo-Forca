@@ -15,12 +15,12 @@
       <b-form-group
         v-if="mode === 'save'"
         label="Categoria:"
-        label-for="palavra.categoria"
+        label-for="palavra.category.name"
       >
         <b-form-select
           id="palavra-categoria"
           :options="categorias"
-          v-model="palavra.categoria"
+          v-model="palavra.category.id"
         />
       </b-form-group>
       <b-button variant="primary" v-if="mode === 'save'" @click="save"
@@ -58,7 +58,9 @@ export default {
   data: function () {
     return {
       mode: "save",
-      palavra: {},
+      palavra: {
+        category: {}
+      },
       palavras: [],
       categorias: [],
       fields: [
@@ -79,11 +81,12 @@ export default {
       });
     },
     loadPalavras() {
-      const url = `${baseApiUrl}/palavras`;
+      const url = `${baseApiUrl}/api/word`;
       axios.get(url).then((res) => {
         this.palavras = res.data.data.map((palavra) => {
           return { ...palavra, value: palavra.id };
         });
+        this.$forceUpdate();
       });
     },
     reset() {
@@ -93,9 +96,10 @@ export default {
     },
     save() {
       const method = this.palavra.id ? "put" : "post";
-      const id = this.palavra.id ? `/${this.palavra.id}` : "";
-      axios[method](`${baseApiUrl}/palavras${id}`, this.palavra)
+      const id = this.palavra.id ? `api/word/${this.palavra.id}` : "api/category/"+this.palavra.category.id+"/word";
+      axios[method](`${baseApiUrl}/${id}`, this.palavra)
         .then(() => {
+          this.loadPalavras();
           this.$toasted.global.defaultSuccess();
           this.reset();
         })
@@ -104,7 +108,7 @@ export default {
     remove() {
       const id = this.palavra.id;
       axios
-        .delete(`${baseApiUrl}/palavras/${id}`)
+        .delete(`${baseApiUrl}/api/word/${id}`)
         .then(() => {
           this.$toasted.global.defaultSuccess();
           this.reset();
