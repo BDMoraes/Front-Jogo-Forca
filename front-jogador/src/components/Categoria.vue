@@ -1,13 +1,19 @@
 <template>
-  <b-container class="home">
+  <b-container class="back">
     <b-row class="justify-content-md-center title title-div">
-      <h1>Ranking de Jogadores</h1>
+      <h1>Selecione a categoria</h1>
     </b-row>
-    <b-row class="justify-content-md-center">
-      <b-table hover striped :items="jogadores" :fields="fields"> </b-table>
-    </b-row>
+    <!-- <b-row class="justify-content-md-center">
+      <b-form-group label="Categoria:" label-for="categoria.name">
+        <b-form-select
+          id="palavra-categoria"
+          :options="categorias"
+          v-model="categoria.name"
+        />
+      </b-form-group>
+    </b-row> -->
     <b-row class="justify-content-md-center title">
-      <b-button class="btn-lg botao" @click="categoria">Jogar</b-button>
+      <b-button class="btn-lg botao">Vamos lá!</b-button>
     </b-row>
   </b-container>
 </template>
@@ -18,32 +24,26 @@ import { baseApiUrl /*showError*/ } from "@/global";
 import axios from "axios";
 
 export default {
-  name: "Home",
+  name: "Categoria",
   data: function () {
     return {
-      jogadores: [],
-      fields: [
-        { key: "name", label: "Nome" },
-        { key: "pontos", label: "Pontos" },
-        { key: "seila", label: "Pontos" },
-        { key: "naosei", label: "Pontos" },
-      ],
+      categorias: [],
     };
   },
   methods: {
-    loadJogadores() {
-      const url = `${baseApiUrl}/api/`;
+    loadCategorias() {
+      const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
-        this.jogadores = res.data.data.map((jogador) => {
-          return { ...jogador, value: jogador.name };
+        this.categorias = res.data.data.map((categoria) => {
+          return { value: categoria.id, text: categoria.name };
         });
       });
     },
     categoria(){
-      this.$router.push({ path: "/categoria" });
+      this.$router.push({ path: "/Jogo" });
     },
     mounted() {
-      this.loadJogadores();
+      this.loadCategorias();
     },
   },
 };
@@ -54,7 +54,7 @@ export default {
   font-family: fontDalek;
   src: url("../assets/fonts/DALEKPINPOINTBOLD.TTF");
 }
-.home {
+.back {
   background-color: white;
   width: 80%;
   height: 70%;

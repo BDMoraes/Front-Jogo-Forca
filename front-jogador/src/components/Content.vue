@@ -1,6 +1,8 @@
 <template>
   <div class="content">
-    <router-view></router-view>
+    
+      <router-view></router-view>
+   
   </div>
 </template>
 
@@ -11,7 +13,7 @@ export default {
 </script>
 
 <style>
-.content {
+.content{
   background-image: url("../assets/img/bg.jpg");
   height: 100%;
   display: flex;
