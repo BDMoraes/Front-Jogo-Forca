@@ -1,19 +1,25 @@
 <template>
   <b-container class="back">
-    <b-row class="justify-content-md-center title title-div">
-      <h1>Selecione a categoria</h1>
+    <b-row class="title title-div" align-h="center">
+      <b-col align-self="center">
+        <h1>Selecione a categoria</h1>
+      </b-col>
     </b-row>
-    <!-- <b-row class="justify-content-md-center">
-      <b-form-group label="Categoria:" label-for="categoria.name">
-        <b-form-select
-          id="palavra-categoria"
-          :options="categorias"
-          v-model="categoria.name"
-        />
-      </b-form-group>
-    </b-row> -->
-    <b-row class="justify-content-md-center title">
-      <b-button class="btn-lg botao">Vamos lá!</b-button>
+    <b-row align-h="center">
+      <b-col align-self="center">
+        <b-form-group class="select-categoria" label-for="categoria.name">
+          <b-form-select
+            id="palavra-categoria"
+            :options="categorias"
+            v-model="categoria.name"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row  class="title" align-h="center">
+      <b-col align-self="center">
+        <b-button class="btn-lg botao" @click="categoria">Vamos lá!</b-button>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -39,7 +45,7 @@ export default {
         });
       });
     },
-    categoria(){
+    categoria() {
       this.$router.push({ path: "/Jogo" });
     },
     mounted() {
@@ -73,5 +79,10 @@ export default {
 }
 .botao {
   background-color: orange;
+}
+.select-categoria {
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
 </style>

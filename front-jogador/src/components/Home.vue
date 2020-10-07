@@ -1,12 +1,14 @@
 <template>
   <b-container class="home">
-    <b-row class="justify-content-md-center title title-div">
+    <b-row class="title title-div" align-h="center">
       <h1>Ranking de Jogadores</h1>
     </b-row>
-    <b-row class="justify-content-md-center">
-      <b-table hover striped :items="jogadores" :fields="fields"> </b-table>
+    <b-row align-h="center">
+      <b-col align-self="center">
+        <b-table hover striped :items="jogadores" :fields="fields"> </b-table>
+      </b-col>
     </b-row>
-    <b-row class="justify-content-md-center title">
+    <b-row align-h="center">
       <b-button class="btn-lg botao" @click="categoria">Jogar</b-button>
     </b-row>
   </b-container>
@@ -23,10 +25,9 @@ export default {
     return {
       jogadores: [],
       fields: [
+        { key: "posicao", label: "Posição" },
+        { key: "pontos", label: "Pontuação" },
         { key: "name", label: "Nome" },
-        { key: "pontos", label: "Pontos" },
-        { key: "seila", label: "Pontos" },
-        { key: "naosei", label: "Pontos" },
       ],
     };
   },
@@ -39,7 +40,7 @@ export default {
         });
       });
     },
-    categoria(){
+    categoria() {
       this.$router.push({ path: "/categoria" });
     },
     mounted() {
