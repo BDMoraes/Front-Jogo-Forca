@@ -1,5 +1,10 @@
 <template>
-  <b-container fluid class="text-center back">
+  <b-container class="back">
+    <b-row class="palavra">
+      <div v-for="palavra in palavra" :key="palavra" class="">
+        A
+      </div>
+    </b-row>
   </b-container>
 </template>
 
@@ -13,6 +18,7 @@ export default {
   data: function () {
     return {
       categorias: [],
+      palavra: 9,
     };
   },
   methods: {
@@ -41,9 +47,13 @@ export default {
 }
 .back {
   background-color: white;
-  display: grid;
-  justify-content: center;
-  align-items: center;
   border-radius: 10px;
+}
+.palavra div{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 2px solid black;
+  margin: 2px;
 }
 </style>
