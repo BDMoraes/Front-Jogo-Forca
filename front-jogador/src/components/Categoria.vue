@@ -16,7 +16,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row  class="title" align-h="center">
+    <b-row class="title" align-h="center">
       <b-col align-self="center">
         <b-button class="btn-lg botao" @click="categoria">Vamos lá!</b-button>
       </b-col>
@@ -33,24 +33,27 @@ export default {
   name: "Categoria",
   data: function () {
     return {
-      categorias: [],
+      categorias: [
+        {value: 0,
+        text: "todas"}
+      ],
     };
   },
   methods: {
     loadCategorias() {
       const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
-        this.categorias = res.data.data.map((categoria) => {
+        this.categorias = [...this.categorias, ...res.data.data.map((categoria) => {
           return { value: categoria.id, text: categoria.name };
-        });
+        })];
       });
     },
     categoria() {
       this.$router.push({ path: "/Jogo" });
     },
-    mounted() {
-      this.loadCategorias();
-    },
+  },
+  mounted() {
+    this.loadCategorias();
   },
 };
 </script>

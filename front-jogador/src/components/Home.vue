@@ -5,8 +5,16 @@
     </b-row>
     <b-row align-h="center">
       <b-col align-self="center">
-        <b-table hover striped :items="jogadores" :fields="fields"> </b-table>
+        <b-table hover striped :fields="fields"> </b-table>
       </b-col>
+    </b-row>
+    <b-row align-h="center">
+      <div v-for="(jogador, index) in jogadores" :key="jogador.name" class="ranking">
+        <span>{{ index + 1 }} </span>
+        <span class="name">{{ jogador.name }} </span>
+        <span>{{ jogador.score }}</span>
+        <br>
+      </div>
     </b-row>
     <b-row align-h="center">
       <b-button class="btn-lg botao" @click="categoria">Jogar</b-button>
@@ -15,7 +23,7 @@
 </template>
 
 <script>
-import { baseApiUrl /*showError*/ } from "@/global";
+import { baseApiUrl} from "@/global";
 
 import axios from "axios";
 
@@ -33,7 +41,7 @@ export default {
   },
   methods: {
     loadJogadores() {
-      const url = `${baseApiUrl}/api/`;
+      const url = `${baseApiUrl}/api/ranking`;
       axios.get(url).then((res) => {
         this.jogadores = res.data.data.map((jogador) => {
           return { ...jogador, value: jogador.name };
@@ -43,9 +51,10 @@ export default {
     categoria() {
       this.$router.push({ path: "/categoria" });
     },
-    mounted() {
-      this.loadJogadores();
-    },
+  },
+  mounted() {
+    console.log("aqui");
+    this.loadJogadores();
   },
 };
 </script>
@@ -74,5 +83,15 @@ export default {
 }
 .botao {
   background-color: orange;
+}
+.ranking {
+  display: inline-block;
+  font-family: fontDalek;
+  font-size: 20px;
+}
+.name {
+  color: orange;
+  padding-right: 30px;
+  padding-left: 30px;
 }
 </style>
