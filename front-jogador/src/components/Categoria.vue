@@ -8,11 +8,7 @@
     <b-row align-h="center">
       <b-col align-self="center">
         <b-form-group class="select-categoria" label-for="categoria.name">
-          <b-form-select
-            id="palavra-categoria"
-            :options="categorias"
-            v-model="categoria.name"
-          />
+          <b-form-select id="palavra-categoria" :options="categorias" v-model="categoria.name" class="font"/>
         </b-form-group>
       </b-col>
     </b-row>
@@ -33,6 +29,7 @@ export default {
   name: "Categoria",
   data: function () {
     return {
+      selected: "todas",
       categorias: [
         {value: 0,
         text: "todas"}
@@ -87,5 +84,9 @@ export default {
   display: grid;
   justify-content: center;
   align-items: center;
+}
+.font{
+  font-family: fontDalek;
+  font-size: 15px;
 }
 </style>
