@@ -8,7 +8,7 @@
     <b-row align-h="center">
       <b-col align-self="center">
         <b-form-group class="select-categoria" label-for="categoria.name">
-          <b-form-select id="palavra-categoria" :options="categorias" v-model="categoria.name" class="font"/>
+          <b-form-select id="palavra-categoria" :options="categorias" v-model="selected" class="font"/>
         </b-form-group>
       </b-col>
     </b-row>
@@ -21,18 +21,20 @@
 </template>
 
 <script>
-import { baseApiUrl /*showError*/ } from "@/global";
+import {baseApiUrl} from '@/global';
 
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "Categoria",
-  data: function () {
+  name: 'Categoria',
+  data: function() {
     return {
-      selected: "todas",
+      selected: 0,
       categorias: [
-        {value: 0,
-        text: "todas"}
+        {
+          value: 0,
+          text: 'Todas',
+        },
       ],
     };
   },
@@ -40,13 +42,14 @@ export default {
     loadCategorias() {
       const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
-        this.categorias = [...this.categorias, ...res.data.data.map((categoria) => {
-          return { value: categoria.id, text: categoria.name };
-        })];
+        this.categorias = [
+          ...this.categorias, ...res.data.data.map((categoria) => {
+            return {value: categoria.id, text: categoria.name};
+          })];
       });
     },
     categoria() {
-      this.$router.push({ path: "/Jogo" });
+      this.$router.push({path: '/Jogo'});
     },
   },
   mounted() {
@@ -60,6 +63,7 @@ export default {
   font-family: fontDalek;
   src: url("../assets/fonts/DALEKPINPOINTBOLD.TTF");
 }
+
 .back {
   background-color: white;
   width: 80%;
@@ -69,23 +73,28 @@ export default {
   align-items: center;
   border-radius: 10px;
 }
+
 .title {
   font-family: fontDalek;
 }
+
 .title-div {
   background-color: orange;
   border-radius: 10px;
   width: 120%;
 }
+
 .botao {
   background-color: orange;
 }
+
 .select-categoria {
   display: grid;
   justify-content: center;
   align-items: center;
 }
-.font{
+
+.font {
   font-family: fontDalek;
   font-size: 15px;
 }

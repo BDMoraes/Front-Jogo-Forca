@@ -10,8 +10,8 @@
     </b-row>
     <b-col class="ran">
       <b-row v-for="(jogador, index) in jogadores" :key="jogador.name" class="ranking">
-        <span>{{ index + 1 }} </span>
-        <span class="name">{{ jogador.name }} </span>
+        <span>{{ index + 1 }}</span>
+        <span class="name">{{ jogador.name }}</span>
         <span>{{ jogador.score }}</span>
       </b-row>
     </b-col>
