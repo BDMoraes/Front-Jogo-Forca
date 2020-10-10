@@ -20,6 +20,7 @@
               v-if="letra"
               class="btn-lg botao"
               @click="validar(letra)"
+              :disabled="carregando"
               >{{ letra }}</b-button
             >
           </span>
@@ -45,6 +46,7 @@ export default {
   name: "Jogo",
   data: function () {
     return {
+      carregando: false,
       categorias: [],
       letras: [],
       alfabeto: [...Array(26)].map((_, y) => String.fromCharCode(y + 65)),
@@ -53,6 +55,7 @@ export default {
   },
   methods: {
     loadPalavra() {
+      this.carregando = true;
       this.letras = new Array(7);
       // const url = `${baseApiUrl}/api/`;
       // axios.get(url).then((res) => {
@@ -60,11 +63,14 @@ export default {
       //     return { value: categoria.id, text: categoria.name };
       //   });
       // });
+
+      this.carregando = false;
     },
     async validar(letra) {
+      this.carregando = true;
+
       const url = `${baseApiUrl}/api/game/letter`;
       const { data } = await axios.post(url, { id: 7, letter: letra });
-      console.log(data);
 
       if (data.length > 0) {
         const letras = [...this.letras];
@@ -72,14 +78,17 @@ export default {
           letras[posicao] = letra;
         });
         this.letras = letras;
-        console.log(this.letras);
       } else {
         this.erros = [...this.erros, letra];
       }
+
       const index = this.alfabeto.indexOf(letra);
       const alfabeto = [...this.alfabeto];
+
       delete alfabeto[index];
+
       this.alfabeto = alfabeto;
+      this.carregando = false;
     },
     categoria() {
       this.$router.push({ path: "/Jogo" });
