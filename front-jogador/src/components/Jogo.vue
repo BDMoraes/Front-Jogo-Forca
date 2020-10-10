@@ -3,25 +3,25 @@
     <b-col class="topo">
       <b-row align-h="between">
         <b-col>
-           <img src="../assets/img/Pitagoras_corda.png" width="260" height="300" />
+          <img src="../assets/img/Pitagoras_corda.png" width="260" height="300"/>
         </b-col>
-         <b-col>
-            <img src="../assets/img/temp.gif" width="300" />
+        <b-col class="box-timer timer">
+          <b-row align-h="center"> 00 : {{ displayTime }} </b-row>
         </b-col>
-      </b-row>
-    </b-col>
-     <b-col>
-      <b-row align-h="start">
-           <img src="../assets/img/en6.png" width="200" class="corpo" v-if="erros.length == 6"/>
-           <img src="../assets/img/en5.png" width="200" class="corpo" v-if="erros.length == 5"/>
-           <img src="../assets/img/en4.png" width="200" class="corpo" v-if="erros.length == 4" />
-           <img src="../assets/img/en3.png" width="200" class="corpo" v-if="erros.length == 3"/>
-           <img src="../assets/img/en2.png" width="200" class="corpo" v-if="erros.length == 2"/>
-           <img src="../assets/img/en1.png" width="200" class="corpo" v-if="erros.length == 1"/>
       </b-row>
     </b-col>
     <b-col>
-       <b-row class="palavra" align-h="center">
+      <b-row align-h="start">
+        <img src="../assets/img/en6.png" width="200" class="corpo" v-if="erros.length == 6"/>
+        <img src="../assets/img/en5.png" width="200" class="corpo" v-if="erros.length == 5"/>
+        <img src="../assets/img/en4.png" width="200" class="corpo" v-if="erros.length == 4"/>
+        <img src="../assets/img/en3.png" width="200" class="corpo" v-if="erros.length == 3"/>
+        <img src="../assets/img/en2.png" width="200" class="corpo" v-if="erros.length == 2"/>
+        <img src="../assets/img/en1.png" width="200" class="corpo" v-if="erros.length == 1"/>
+      </b-row>
+    </b-col>
+    <b-col>
+      <b-row class="palavra" align-h="center">
         <div v-for="letra in letras" :key="letra" class="letras">
           <span v-if="letra">{{ letra }}</span>
           <span v-if="!letra"> </span>
@@ -30,18 +30,20 @@
     </b-col>
     <b-col>
       <b-row class="opcoes">
-        <b-div class="alfabeto">
+        <div class="alfabeto">
           <span v-for="letra in alfabeto" :key="letra">
             <b-button v-if="letra" class="btn-lg botao" @click="validar(letra)" :disabled="carregando">
-               {{ letra }}
+              {{ letra }}
             </b-button>
           </span>
-        </b-div>
+        </div>
       </b-row>
     </b-col>
     <b-col>
       <b-row class="fundo" align-h="center">
-        <b-div v-for="letra in erros" :key="letra" class="letras-erradas">{{letra}}</b-div>
+        <div v-for="letra in erros" :key="letra" class="letras-erradas">
+          {{ letra }}
+        </div>
       </b-row>
     </b-col>
   </b-container>
@@ -61,9 +63,20 @@ export default {
       letras: [],
       alfabeto: [...Array(26)].map((_, y) => String.fromCharCode(y + 65)),
       erros: [],
+      displayTime: 60,
     };
   },
   methods: {
+    contadorTempo() {
+      if (this.displayTime > 0) {
+        setTimeout(() => {
+          this.displayTime -= 1;
+          this.contadorTempo();
+        }, 1000);
+      } else {
+        console.log("acabou");
+      }
+    },
     loadPalavra() {
       this.carregando = true;
       this.letras = new Array(7);
@@ -106,6 +119,7 @@ export default {
   },
   mounted() {
     this.loadPalavra();
+    this.contadorTempo();
   },
 };
 </script>
@@ -170,9 +184,23 @@ export default {
 .fundo {
   margin-top: 30px;
 }
-.corpo{
+.corpo {
   position: relative;
   left: 145px;
   margin-top: -50px;
+}
+.box-timer {
+  display: grid;
+  align-items: center;
+  text-align: center;
+}
+.timer {
+  font-family: fontDalek;
+  padding: 5px;
+  display: grid;
+  align-items: center;
+  text-align: center;
+  font-size: 55px;
+  color: orangered;
 }
 </style>
