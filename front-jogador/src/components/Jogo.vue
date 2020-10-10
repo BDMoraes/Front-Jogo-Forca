@@ -2,10 +2,26 @@
   <b-container class="back-jogo">
     <b-col class="topo">
       <b-row align-h="between">
-        <img src="../assets/img/Pitagoras_corda.png" width="260" height="300" />
-        <img src="../assets/img/temp.gif" width="300" />
+        <b-col>
+           <img src="../assets/img/Pitagoras_corda.png" width="260" height="300" />
+        </b-col>
+         <b-col>
+            <img src="../assets/img/temp.gif" width="300" />
+        </b-col>
       </b-row>
-      <b-row class="palavra" align-h="center">
+    </b-col>
+     <b-col>
+      <b-row align-h="start">
+           <img src="../assets/img/en6.png" width="200" class="corpo" v-if="erros.length == 6"/>
+           <img src="../assets/img/en5.png" width="200" class="corpo" v-if="erros.length == 5"/>
+           <img src="../assets/img/en4.png" width="200" class="corpo" v-if="erros.length == 4" />
+           <img src="../assets/img/en3.png" width="200" class="corpo" v-if="erros.length == 3"/>
+           <img src="../assets/img/en2.png" width="200" class="corpo" v-if="erros.length == 2"/>
+           <img src="../assets/img/en1.png" width="200" class="corpo" v-if="erros.length == 1"/>
+      </b-row>
+    </b-col>
+    <b-col>
+       <b-row class="palavra" align-h="center">
         <div v-for="letra in letras" :key="letra" class="letras">
           <span v-if="letra">{{ letra }}</span>
           <span v-if="!letra"> </span>
@@ -16,22 +32,16 @@
       <b-row class="opcoes">
         <b-div class="alfabeto">
           <span v-for="letra in alfabeto" :key="letra">
-            <b-button
-              v-if="letra"
-              class="btn-lg botao"
-              @click="validar(letra)"
-              :disabled="carregando"
-              >{{ letra }}</b-button
-            >
+            <b-button v-if="letra" class="btn-lg botao" @click="validar(letra)" :disabled="carregando">
+               {{ letra }}
+            </b-button>
           </span>
         </b-div>
       </b-row>
     </b-col>
     <b-col>
-      <b-row class="fundo" align-h="start">
-        <b-div v-for="letra in erros" :key="letra" class="letras-erradas">{{
-          letra
-        }}</b-div>
+      <b-row class="fundo" align-h="center">
+        <b-div v-for="letra in erros" :key="letra" class="letras-erradas">{{letra}}</b-div>
       </b-row>
     </b-col>
   </b-container>
@@ -109,7 +119,8 @@ export default {
   background-color: white;
   border-radius: 10px;
   width: 180%;
-  height: 95%;
+  height: 100%;
+  display: grid;
 }
 .palavra div {
   display: inline-block;
@@ -120,7 +131,7 @@ export default {
   border-bottom: 10px solid black;
   margin: 2px;
   padding-bottom: 0px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 .letras {
   display: inline-block;
@@ -146,17 +157,22 @@ export default {
   margin: 5px;
 }
 .topo {
-  margin-bottom: 150px;
+  margin-bottom: 0px;
 }
 .letras-erradas {
   display: inline-block;
   font-size: 20px;
-  margin-bottom: 0px;
   font-family: fontDalek;
   margin-right: 19px;
   text-decoration: line-through;
+  color: red;
 }
 .fundo {
   margin-top: 30px;
+}
+.corpo{
+  position: relative;
+  left: 145px;
+  margin-top: -50px;
 }
 </style>
