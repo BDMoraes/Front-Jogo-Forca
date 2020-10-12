@@ -3,7 +3,11 @@
     <b-col class="topo">
       <b-row align-h="between">
         <b-col>
-          <img src="../assets/img/Pitagoras_corda.png" width="260" height="300"/>
+          <img
+            src="../assets/img/Pitagoras_corda.png"
+            width="260"
+            height="300"
+          />
         </b-col>
         <b-col class="box-timer timer">
           <b-row align-h="center"> 00 : {{ displayTime }} </b-row>
@@ -12,12 +16,42 @@
     </b-col>
     <b-col>
       <b-row align-h="start">
-        <img src="../assets/img/en6.png" width="200" class="corpo" v-if="erros.length == 6"/>
-        <img src="../assets/img/en5.png" width="200" class="corpo" v-if="erros.length == 5"/>
-        <img src="../assets/img/en4.png" width="200" class="corpo" v-if="erros.length == 4"/>
-        <img src="../assets/img/en3.png" width="200" class="corpo" v-if="erros.length == 3"/>
-        <img src="../assets/img/en2.png" width="200" class="corpo" v-if="erros.length == 2"/>
-        <img src="../assets/img/en1.png" width="200" class="corpo" v-if="erros.length == 1"/>
+        <img
+          src="../assets/img/en6.png"
+          width="200"
+          class="corpo"
+          v-if="erros.length == 6"
+        />
+        <img
+          src="../assets/img/en5.png"
+          width="200"
+          class="corpo"
+          v-if="erros.length == 5"
+        />
+        <img
+          src="../assets/img/en4.png"
+          width="200"
+          class="corpo"
+          v-if="erros.length == 4"
+        />
+        <img
+          src="../assets/img/en3.png"
+          width="200"
+          class="corpo"
+          v-if="erros.length == 3"
+        />
+        <img
+          src="../assets/img/en2.png"
+          width="200"
+          class="corpo"
+          v-if="erros.length == 2"
+        />
+        <img
+          src="../assets/img/en1.png"
+          width="200"
+          class="corpo"
+          v-if="erros.length == 1"
+        />
       </b-row>
     </b-col>
     <b-col>
@@ -32,7 +66,12 @@
       <b-row class="opcoes">
         <div class="alfabeto">
           <span v-for="letra in alfabeto" :key="letra">
-            <b-button v-if="letra" class="btn-lg botao" @click="validar(letra)" :disabled="carregando">
+            <b-button
+              v-if="letra"
+              class="btn-lg botao"
+              @click="validar(letra)"
+              :disabled="carregando"
+            >
               {{ letra }}
             </b-button>
           </span>
@@ -46,6 +85,28 @@
         </div>
       </b-row>
     </b-col>
+    <b-modal class="desafio-modal" ref="desafio-modal" hide-footer title="Qual a alternativa correta?">
+      <b-row align-h="center" class="linha-modal">
+        <div class="d-block text-center">
+          <h2>{{ this.desafio.description }} = </h2>
+        </div>
+      </b-row>
+      <b-row align-h="center" class="linha-modal">
+        <div class="text-center">
+          <b-form-group class="form">
+            <b-form-radio class="radios" v-model="selected" name="some-radios" value="A">A  {{ this.desafio.optionA }}</b-form-radio>
+            <b-form-radio class="radios" v-model="selected" name="some-radios" value="B">B  {{ this.desafio.optionB }}</b-form-radio>
+            <b-form-radio class="radios" v-model="selected" name="some-radios" value="C">C  {{ this.desafio.optionC }}</b-form-radio>
+          </b-form-group>
+          <div class="d-block mt-3">
+            Opção: <strong>{{ selected }}</strong>
+          </div>
+        </div>
+      </b-row>
+      <b-row align-h="center" class="bt-modal linha-modal">
+        <b-button pill class="d-block text-center botao" variant="success" @click="hideModal">Responder</b-button>
+      </b-row>
+    </b-modal>
   </b-container>
 </template>
 
@@ -63,6 +124,13 @@ export default {
       letras: [],
       alfabeto: [...Array(26)].map((_, y) => String.fromCharCode(y + 65)),
       erros: [],
+      selected: "",
+      desafio: {
+        description: "2² + 3³ - 1",
+        optionA: 3,
+        optionB: 5,
+        optionC: 0,
+      },
       displayTime: 60,
     };
   },
@@ -103,6 +171,9 @@ export default {
         this.letras = letras;
       } else {
         this.erros = [...this.erros, letra];
+        if (this.erros.length == 6) {
+          this.showModal();
+        }
       }
 
       const index = this.alfabeto.indexOf(letra);
@@ -113,8 +184,11 @@ export default {
       this.alfabeto = alfabeto;
       this.carregando = false;
     },
-    categoria() {
-      this.$router.push({ path: "/Jogo" });
+    showModal() {
+      this.$refs["desafio-modal"].show();
+    },
+    hideModal() {
+      this.$refs["desafio-modal"].hide();
     },
   },
   mounted() {
@@ -202,5 +276,25 @@ export default {
   text-align: center;
   font-size: 55px;
   color: orangered;
+}
+
+.desafio-modal {
+  display: grid;
+  align-items: center;
+  text-align: center;
+}
+.bt-modal{
+  margin: 20px;
+}
+.radios{
+  display:inline;
+  align-items: center;
+  text-align: center;
+  margin-right: 30px;
+}
+
+.linha-modal{
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 </style>

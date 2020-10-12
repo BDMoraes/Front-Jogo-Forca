@@ -34,11 +34,7 @@
     <hr />
     <b-table hover striped :items="palavras" :fields="fields">
       <template slot="cell(actions)" slot-scope="data">
-        <b-button
-          variant="warning"
-          @click="loadPalavra(data.item)"
-          class="espaco_bts"
-        >
+        <b-button variant="warning" @click="loadPalavra(data.item)" class="espaco_bts">
           <i class="fa fa-pencil"></i>
         </b-button>
         <b-button variant="danger" @click="loadPalavra(data.item, 'remove')">
