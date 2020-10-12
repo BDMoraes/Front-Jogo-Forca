@@ -94,9 +94,9 @@
       <b-row align-h="center" class="linha-modal">
         <div class="text-center">
           <b-form-group class="form">
-            <b-form-radio class="radios" v-model="selected" name="some-radios" value="A">A  {{ this.desafio.optionA }}</b-form-radio>
-            <b-form-radio class="radios" v-model="selected" name="some-radios" value="B">B  {{ this.desafio.optionB }}</b-form-radio>
-            <b-form-radio class="radios" v-model="selected" name="some-radios" value="C">C  {{ this.desafio.optionC }}</b-form-radio>
+            <b-form-radio class="radios" v-model="selected" name="some-radios" value="A">A)  {{ this.desafio.optionA }}</b-form-radio>
+            <b-form-radio class="radios" v-model="selected" name="some-radios" value="B">B)  {{ this.desafio.optionB }}</b-form-radio>
+            <b-form-radio class="radios" v-model="selected" name="some-radios" value="C">C)  {{ this.desafio.optionC }}</b-form-radio>
           </b-form-group>
           <div class="d-block mt-3">
             Opção: <strong>{{ selected }}</strong>
