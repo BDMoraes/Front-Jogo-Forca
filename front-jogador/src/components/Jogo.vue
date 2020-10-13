@@ -85,18 +85,41 @@
         </div>
       </b-row>
     </b-col>
-    <b-modal class="desafio-modal" ref="desafio-modal" hide-footer title="Qual a alternativa correta?">
+    <b-modal
+      class="desafio-modal"
+      ref="desafio-modal"
+      hide-footer
+      title="Qual a alternativa correta?"
+    >
       <b-row align-h="center" class="linha-modal">
         <div class="d-block text-center">
-          <h2>{{ this.desafio.description }} = </h2>
+          <h2>{{ this.desafio.description }} =</h2>
         </div>
       </b-row>
       <b-row align-h="center" class="linha-modal">
         <div class="text-center">
           <b-form-group class="form">
-            <b-form-radio class="radios" v-model="selected" name="some-radios" value="A">A)  {{ this.desafio.optionA }}</b-form-radio>
-            <b-form-radio class="radios" v-model="selected" name="some-radios" value="B">B)  {{ this.desafio.optionB }}</b-form-radio>
-            <b-form-radio class="radios" v-model="selected" name="some-radios" value="C">C)  {{ this.desafio.optionC }}</b-form-radio>
+            <b-form-radio
+              class="radios"
+              v-model="selected"
+              name="some-radios"
+              value="A"
+              >A) {{ this.desafio.optionA }}</b-form-radio
+            >
+            <b-form-radio
+              class="radios"
+              v-model="selected"
+              name="some-radios"
+              value="B"
+              >B) {{ this.desafio.optionB }}</b-form-radio
+            >
+            <b-form-radio
+              class="radios"
+              v-model="selected"
+              name="some-radios"
+              value="C"
+              >C) {{ this.desafio.optionC }}</b-form-radio
+            >
           </b-form-group>
           <div class="d-block mt-3">
             Opção: <strong>{{ selected }}</strong>
@@ -104,7 +127,13 @@
         </div>
       </b-row>
       <b-row align-h="center" class="bt-modal linha-modal">
-        <b-button pill class="d-block text-center botao" variant="success" @click="hideModal">Responder</b-button>
+        <b-button
+          pill
+          class="d-block text-center botao"
+          variant="success"
+          @click="hideModal"
+          >Responder</b-button
+        >
       </b-row>
     </b-modal>
   </b-container>
@@ -173,6 +202,12 @@ export default {
         this.erros = [...this.erros, letra];
         if (this.erros.length == 6) {
           this.showModal();
+          // const url = `${baseApiUrl}/api/`;
+          // axios.get(url).then((res) => {
+          //   this.categorias = res.data.data.map((categoria) => {
+          //     return { value: categoria.id, text: categoria.name };
+          //   });
+          // });
         }
       }
 
@@ -283,17 +318,17 @@ export default {
   align-items: center;
   text-align: center;
 }
-.bt-modal{
+.bt-modal {
   margin: 20px;
 }
-.radios{
-  display:inline;
+.radios {
+  display: inline;
   align-items: center;
   text-align: center;
   margin-right: 30px;
 }
 
-.linha-modal{
+.linha-modal {
   margin-top: 30px;
   margin-bottom: 30px;
 }
