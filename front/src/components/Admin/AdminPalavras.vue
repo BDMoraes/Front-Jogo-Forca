@@ -32,9 +32,13 @@
       <b-button class="ml-2" @click="reset">Cancelar</b-button>
     </b-form>
     <hr />
-    <b-table hover striped :items="palavras" :fields="fields">
+    <b-table hover striped :items="palavras" :fields="fields" ref="table">
       <template slot="cell(actions)" slot-scope="data">
-        <b-button variant="warning" @click="loadPalavra(data.item)" class="espaco_bts">
+        <b-button
+          variant="warning"
+          @click="loadPalavra(data.item)"
+          class="espaco_bts"
+        >
           <i class="fa fa-pencil"></i>
         </b-button>
         <b-button variant="danger" @click="loadPalavra(data.item, 'remove')">
@@ -55,14 +59,14 @@ export default {
     return {
       mode: "save",
       palavra: {
-        category: {}
+        category: {},
       },
       palavras: [],
       categorias: [],
       fields: [
         { key: "id", label: "Código", sortable: true },
         { key: "name", label: "Nome", sortable: true },
-        { key: "category", label: "Categoria", sortable: true },
+        { key: "category.name", label: "Categoria", sortable: true },
         { key: "actions", label: "Ações" },
       ],
     };
@@ -76,14 +80,13 @@ export default {
         });
       });
     },
-    loadPalavras() {
+    async loadPalavras() {
       const url = `${baseApiUrl}/api/word`;
-      axios.get(url).then((res) => {
-        this.palavras = res.data.data.map((palavra) => {
+      const {data} = await axios.get(url);
+      this.palavras = [...data.data.map((palavra) => {
           return { ...palavra, value: palavra.id };
-        });
-        this.$forceUpdate();
-      });
+        })];
+        this.$refs.table.refresh();
     },
     reset() {
       this.mode = "save";
@@ -92,7 +95,9 @@ export default {
     },
     save() {
       const method = this.palavra.id ? "put" : "post";
-      const id = this.palavra.id ? `api/word/${this.palavra.id}` : "api/category/"+this.palavra.category.id+"/word";
+      const id = this.palavra.id
+        ? `api/word/${this.palavra.id}`
+        : "api/category/" + this.palavra.category.id + "/word";
       axios[method](`${baseApiUrl}/${id}`, this.palavra)
         .then(() => {
           this.loadPalavras();

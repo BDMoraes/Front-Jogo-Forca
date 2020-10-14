@@ -49,7 +49,7 @@ export default {
       });
     },
     categoria() {
-      this.$router.push({path: '/Jogo'});
+      this.$router.push({path: '/Jogo/' + this.selected});
     },
   },
   mounted() {

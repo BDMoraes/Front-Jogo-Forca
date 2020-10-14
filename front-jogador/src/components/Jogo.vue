@@ -20,37 +20,37 @@
           src="../assets/img/en6.png"
           width="200"
           class="corpo"
-          v-if="erros.length == 6"
+          v-if="numErros == 6"
         />
         <img
           src="../assets/img/en5.png"
           width="200"
           class="corpo"
-          v-if="erros.length == 5"
+          v-if="numErros == 5"
         />
         <img
           src="../assets/img/en4.png"
           width="200"
           class="corpo"
-          v-if="erros.length == 4"
+          v-if="numErros == 4"
         />
         <img
           src="../assets/img/en3.png"
           width="200"
           class="corpo"
-          v-if="erros.length == 3"
+          v-if="numErros == 3"
         />
         <img
           src="../assets/img/en2.png"
           width="200"
           class="corpo"
-          v-if="erros.length == 2"
+          v-if="numErros == 2"
         />
         <img
           src="../assets/img/en1.png"
           width="200"
           class="corpo"
-          v-if="erros.length == 1"
+          v-if="numErros == 1"
         />
       </b-row>
     </b-col>
@@ -93,37 +93,21 @@
     >
       <b-row align-h="center" class="linha-modal">
         <div class="d-block text-center">
-          <h2>{{ this.desafio.description }} =</h2>
+          <h2>{{ this.desafio }} =</h2>
         </div>
       </b-row>
       <b-row align-h="center" class="linha-modal">
         <div class="text-center">
           <b-form-group class="form">
             <b-form-radio
+              v-for="(resposta, indice) in respostas"
+              :key="resposta.id"
               class="radios"
               v-model="selected"
-              name="some-radios"
-              value="A"
-              >A) {{ this.desafio.optionA }}</b-form-radio
-            >
-            <b-form-radio
-              class="radios"
-              v-model="selected"
-              name="some-radios"
-              value="B"
-              >B) {{ this.desafio.optionB }}</b-form-radio
-            >
-            <b-form-radio
-              class="radios"
-              v-model="selected"
-              name="some-radios"
-              value="C"
-              >C) {{ this.desafio.optionC }}</b-form-radio
+              :value="resposta.id"
+              >{{ indice + 1 }}) {{ resposta.answer }}</b-form-radio
             >
           </b-form-group>
-          <div class="d-block mt-3">
-            Opção: <strong>{{ selected }}</strong>
-          </div>
         </div>
       </b-row>
       <b-row align-h="center" class="bt-modal linha-modal">
@@ -149,17 +133,16 @@ export default {
   data: function () {
     return {
       carregando: false,
+      desafiou: false,
       categorias: [],
       letras: [],
       alfabeto: [...Array(26)].map((_, y) => String.fromCharCode(y + 65)),
       erros: [],
+      numErros: 0,
+      palavra: null,
       selected: "",
-      desafio: {
-        description: "2² + 3³ - 1",
-        optionA: 3,
-        optionB: 5,
-        optionC: 0,
-      },
+      desafio: "",
+      respostas: [],
       displayTime: 60,
     };
   },
@@ -176,21 +159,26 @@ export default {
     },
     loadPalavra() {
       this.carregando = true;
-      this.letras = new Array(7);
-      // const url = `${baseApiUrl}/api/`;
-      // axios.get(url).then((res) => {
-      //   this.categorias = res.data.data.map((categoria) => {
-      //     return { value: categoria.id, text: categoria.name };
-      //   });
-      // });
-
+      const categoria = this.$route.params.categoria;
+      const url = `${baseApiUrl}/api/game/word/` + categoria;
+      axios.get(url).then((res) => {
+        this.alfabeto = [...Array(26)].map((_, y) => String.fromCharCode(y + 65));
+        this.numErros = 0;
+        this.erros = [];
+        this.displayTime = 60;
+        this.letras = new Array(res.data.data.size);
+        this.palavra = res.data.data.id;
+      });
       this.carregando = false;
     },
     async validar(letra) {
       this.carregando = true;
 
       const url = `${baseApiUrl}/api/game/letter`;
-      const { data } = await axios.post(url, { id: 7, letter: letra });
+      const { data } = await axios.post(url, {
+        id: this.palavra,
+        letter: letra,
+      });
 
       if (data.length > 0) {
         const letras = [...this.letras];
@@ -198,16 +186,19 @@ export default {
           letras[posicao] = letra;
         });
         this.letras = letras;
+        if(this.letras.filter(Boolean).length === this.letras.length){
+            this.loadPalavra()
+        }
       } else {
         this.erros = [...this.erros, letra];
-        if (this.erros.length == 6) {
-          this.showModal();
-          // const url = `${baseApiUrl}/api/`;
-          // axios.get(url).then((res) => {
-          //   this.categorias = res.data.data.map((categoria) => {
-          //     return { value: categoria.id, text: categoria.name };
-          //   });
-          // });
+        this.numErros = this.numErros + 1;
+        if (this.numErros == 6) {
+          if (!this.desafiou) {
+            this.showModal();
+            this.desafiou = true;
+          } else {
+            console.log("PERDEU - mostrar nome ranking");
+          }
         }
       }
 
@@ -220,10 +211,25 @@ export default {
       this.carregando = false;
     },
     showModal() {
+      this.displayTime = 0;
+      const url = `${baseApiUrl}/api/game/question`;
+      axios.get(url).then((res) => {
+        this.desafio = res.data.question.question;
+        this.respostas = res.data.answers;
+      });
       this.$refs["desafio-modal"].show();
     },
     hideModal() {
-      this.$refs["desafio-modal"].hide();
+      const url = `${baseApiUrl}/api/game/question/answer`;
+      axios.post(url, { id: this.selected }).then((res) => {
+        if (res.data) {
+          this.numErros = this.numErros - 1;
+          this.displayTime = 60;
+        } else {
+          console.log("PERDEU - mostrar nome ranking");
+        }
+        this.$refs["desafio-modal"].hide();
+      });
     },
   },
   mounted() {

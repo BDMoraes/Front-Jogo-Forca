@@ -12,16 +12,6 @@
           placeholder="Informe o Nome da Questao..."
         />
       </b-form-group>
-      <b-form-group label="Descrição:" label-for="questao-desc">
-        <b-form-input
-          id="questao-desc"
-          type="text"
-          v-model="questao.desc"
-          required
-          :readonly="mode === 'remove'"
-          placeholder="Informe a Descrição da Questao..."
-        />
-      </b-form-group>
       <b-form-group label="Resposta:" label-for="questao-resp">
         <b-form-input
           id="questao-resp"
@@ -139,7 +129,7 @@ export default {
       const method = resposta.id ? "put" : "post";
       const id = resposta.id
         ? `api/answer/${resposta.id}`
-        : `api/question/${questao.id}/answer${id}`;
+        : `api/question/${questao.id}/answer`;
       axios[method](`${baseApiUrl}/${id}`, resposta);
       this.loadQuestoes();
     },
@@ -158,12 +148,13 @@ export default {
       const response = await axios.get(
         `${baseApiUrl}/api/question/${questao.id}/answer`
       );
-      questao.resp = response.data.data.find((resposta) => resposta.correct);
+      questao.resp = response.data.data.find((resposta) => resposta.correct) ??{};
       const respostas = response.data.data.filter(
         (resposta) => !resposta.correct
       );
-      questao.alt1 = respostas.shift();
-      questao.alt2 = respostas.shift();
+      questao.alt1 = respostas.shift() ??{};
+      questao.alt2 = respostas.shift() ??{};
+      console.log(questao);
       this.questao = { ...questao };
     },
   },
