@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 import Home from '../components/Home';
 import Categoria from '../components/Categoria';
 import Jogo from '../components/Jogo';
+import Final from '../components/Final';
 
 
 Vue.use(VueRouter)
@@ -22,6 +23,11 @@ const routes = [{
     name: "jogo",
     path: "/Jogo/:categoria",
     component: Jogo
+},
+{
+    name: "final",
+    path: "/Final/:pontos",
+    component: Final
 },]
 
 export default new VueRouter({

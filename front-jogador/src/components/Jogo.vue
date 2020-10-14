@@ -144,6 +144,7 @@ export default {
       desafio: "",
       respostas: [],
       displayTime: 60,
+      pontuacao: 0,
     };
   },
   methods: {
@@ -154,7 +155,10 @@ export default {
           this.contadorTempo();
         }, 1000);
       } else {
-        console.log("acabou");
+        // if(this.desafiou == true){
+        //    this.$router.push({path: '/Final/' + this.pontuacao})
+        // }
+        console.log("teste");
       }
     },
     loadPalavra() {
@@ -162,7 +166,9 @@ export default {
       const categoria = this.$route.params.categoria;
       const url = `${baseApiUrl}/api/game/word/` + categoria;
       axios.get(url).then((res) => {
-        this.alfabeto = [...Array(26)].map((_, y) => String.fromCharCode(y + 65));
+        this.alfabeto = [...Array(26)].map((_, y) =>
+          String.fromCharCode(y + 65)
+        );
         this.numErros = 0;
         this.erros = [];
         this.displayTime = 60;
@@ -179,15 +185,15 @@ export default {
         id: this.palavra,
         letter: letra,
       });
-
       if (data.length > 0) {
         const letras = [...this.letras];
         data.forEach((posicao) => {
           letras[posicao] = letra;
         });
         this.letras = letras;
-        if(this.letras.filter(Boolean).length === this.letras.length){
-            this.loadPalavra()
+        if (this.letras.filter(Boolean).length === this.letras.length) {
+          this.pontuacao += 100;
+          this.loadPalavra();
         }
       } else {
         this.erros = [...this.erros, letra];
@@ -197,7 +203,7 @@ export default {
             this.showModal();
             this.desafiou = true;
           } else {
-            console.log("PERDEU - mostrar nome ranking");
+            this.$router.push({ path: "/Final/" + this.pontuacao });
           }
         }
       }
@@ -225,8 +231,9 @@ export default {
         if (res.data) {
           this.numErros = this.numErros - 1;
           this.displayTime = 60;
+          this.contadorTempo();
         } else {
-          console.log("PERDEU - mostrar nome ranking");
+          this.$router.push({ path: "/Final/" + this.pontuacao });
         }
         this.$refs["desafio-modal"].hide();
       });

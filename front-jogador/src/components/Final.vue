@@ -4,19 +4,18 @@
       <h1>Ranking de Jogadores</h1>
     </b-row>
     <b-row align-h="center">
-      <b-col align-self="center">
-        <b-table hover striped :fields="fields"> </b-table>
-      </b-col>
+      <b-form-group label-for="player-name">
+        <b-form-input
+          id="player-name"
+          type="text"
+          v-model="jogador"
+          required
+          placeholder="Informe seu nickname"
+        />
+      </b-form-group>
     </b-row>
-    <b-col class="ran">
-      <b-row v-for="(jogador, index) in jogadores" :key="jogador.name" class="ranking">
-        <span>{{ index + 1 }}</span>
-        <span class="name">{{ jogador.name }}</span>
-        <span>{{ jogador.score }}</span>
-      </b-row>
-    </b-col>
     <b-row align-h="center">
-      <b-button class="btn-lg botao" @click="categoria">Jogar</b-button>
+      <b-button class="btn-lg botao" @click="finalizar">Gravar</b-button>
     </b-row>
   </b-container>
 </template>
@@ -27,32 +26,21 @@ import { baseApiUrl } from "@/global";
 import axios from "axios";
 
 export default {
-  name: "Home",
+  name: "Final",
   data: function () {
     return {
-      jogadores: [],
-      fields: [
-        { key: "posicao", label: "Posição" },
-        { key: "name", label: "Nome" },
-        { key: "pontos", label: "Pontuação" },
-      ],
+      jogador: "",
     };
   },
   methods: {
-    loadJogadores() {
+    finalizar() {
+      const pontos = this.$route.params.pontos;
       const url = `${baseApiUrl}/api/ranking`;
-      axios.get(url).then((res) => {
-        this.jogadores = res.data.data.map((jogador) => {
-          return { ...jogador, value: jogador.name };
-        });
-      });
-    },
-    categoria() {
-      this.$router.push({ path: "/categoria" });
+      axios.post(url, { name: this.jogador, score: pontos });
+      this.$router.push({ path: "/" });
     },
   },
   mounted() {
-    this.loadJogadores();
   },
 };
 </script>
@@ -91,7 +79,7 @@ export default {
   padding-right: 90px;
   padding-left: 90px;
 }
-.ran{
+.ran {
   display: grid;
   justify-content: center;
   align-items: center;
