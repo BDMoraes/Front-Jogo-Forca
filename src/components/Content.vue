@@ -1,7 +1,7 @@
 <template>
-  <div class="content">
+  <b-container class="content h-100" fluid="true">
     <router-view></router-view>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -11,9 +11,8 @@ export default {
 </script>
 
 <style>
-.content {
-  background-color: white;
-  grid-area: content;
-  padding: 20px;
+.container {
+  padding-top: 5%;
+  padding-bottom: 5%;
 }
 </style>

@@ -1,14 +1,17 @@
 <template>
-  <header class="header">
-    <h1 class="title">
-      {{ title }}
-    </h1>
-    <b-dropdown v-if="authenticated" text="Administrador" variant="transparent">
-      <b-dropdown-item @click="administracao">Dashboard</b-dropdown-item>
-      <b-dropdown-divider></b-dropdown-divider>
-      <b-dropdown-item @click="logout">Sair</b-dropdown-item>
-    </b-dropdown>
-  </header>
+  <b-navbar fixed="top" type="dark" variant="primary">
+    <b-navbar-brand href="/">{{ title }}</b-navbar-brand>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item-dropdown v-if="authenticated" right text="Administrador">
+          <b-dropdown-item @click="administracao">Dashboard</b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item @click="logout">Sair</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
 </template>
 
 <script>
@@ -16,7 +19,6 @@ export default {
   name: 'Header',
   props: {
     title: String,
-    hideUserDropdown: Boolean,
   },
   computed: {
     authenticated() {
@@ -34,38 +36,3 @@ export default {
   },
 };
 </script>
-
-<style>
-@font-face {
-  font-family: fontDalek;
-  src: url("../assets/fonts/DALEKPINPOINTBOLD.TTF");
-}
-
-.header {
-  background: linear-gradient(to right, orangered, orange);
-  grid-area: header;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.title {
-  font-family: fontDalek;
-  font-size: 2rem;
-  color: black;
-  font-weight: 100;
-  flex-grow: 1;
-  text-align: center;
-}
-
-.title a {
-  color: black;
-  text-decoration: none;
-}
-
-.title a:hover {
-  color: black;
-  text-decoration: none;
-}
-</style>

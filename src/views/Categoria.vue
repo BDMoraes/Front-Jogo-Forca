@@ -1,19 +1,15 @@
 <template>
-  <b-container class="back">
-    <b-row class="title title-div" align-h="center">
-      <b-col align-self="center">
-        <h1>Selecione a categoria</h1>
-      </b-col>
-    </b-row>
-    <b-row align-h="center">
+  <b-container>
+    <b-card align="center" bg-variant="secondary" class="mt-5" title="Selecione Uma Categoria"></b-card>
+    <b-row align-h="center" class="mt-5">
       <b-col align-self="center">
         <b-form-group class="select-categoria" label-for="categoria.name">
-          <b-form-select id="palavra-categoria" :options="categorias" v-model="selected" class="font"/>
+          <b-form-select id="palavra-categoria" v-model="selected" :options="categorias" class="font" size="lg"/>
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row class="title" align-h="center">
-      <b-col align-self="center">
+    <b-row class="title mt-5">
+      <b-col class="d-flex justify-content-center">
         <b-button class="btn-lg" variant="primary" @click="categoria">Vamos lá!</b-button>
       </b-col>
     </b-row>
@@ -57,37 +53,7 @@ export default {
   },
 };
 </script>
-
 <style>
-@font-face {
-  font-family: fontDalek;
-  src: url('../assets/fonts/DALEKPINPOINTBOLD.TTF');
-}
-
-.back {
-  background-color: white;
-  width: 80%;
-  height: 70%;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-}
-
-.title {
-  font-family: fontDalek;
-}
-
-.title-div {
-  background-color: orange;
-  border-radius: 10px;
-  width: 120%;
-}
-
-.botao {
-  background-color: orange;
-}
-
 .select-categoria {
   display: grid;
   justify-content: center;
@@ -95,7 +61,6 @@ export default {
 }
 
 .font {
-  font-family: fontDalek;
   font-size: 15px;
 }
 </style>

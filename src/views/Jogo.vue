@@ -1,16 +1,36 @@
 <template>
-  <b-container class="back-jogo">
+  <b-container>
     <b-col class="topo">
-      <b-row align-h="between">
-        <b-col>
+      <b-row>
+        <b-col cols="4">
           <img
-            src="../assets/img/Pitagoras_corda.png"
-            width="260"
-            height="300"
+              height="300"
+              src="../assets/img/Pitagoras_corda.png"
+              width="260"
           />
         </b-col>
-        <b-col class="box-timer timer">
-          <b-row align-h="center"> 00 : {{ displayTime }} </b-row>
+        <b-col align-self="center" cols="8">
+          <b-row align-v="center">
+            <b-col class="timer">
+              <b-row align-h="center"> 00 : {{ displayTime }}</b-row>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-row align-h="center" class="fundo">
+                <div class="timer">Pontos = {{ this.pontuacao }}</div>
+              </b-row>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-row align-h="center" class="fundo">
+                <div v-for="letra in erros" :key="letra" class="letras-erradas">
+                  {{ letra }}
+                </div>
+              </b-row>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
     </b-col>
@@ -67,10 +87,10 @@
         <div class="alfabeto">
           <span v-for="letra in alfabeto" :key="letra">
             <b-button
-              v-if="letra"
-              class="btn-lg botao"
-              @click="validar(letra)"
-              :disabled="carregando"
+                v-if="letra"
+                :disabled="carregando"
+                class="btn-lg botao"
+                @click="validar(letra)"
             >
               {{ letra }}
             </b-button>
@@ -78,23 +98,14 @@
         </div>
       </b-row>
     </b-col>
-    <b-col>
-      <b-row class="fundo" align-h="center">
-        <div v-for="letra in erros" :key="letra" class="letras-erradas">
-          {{ letra }}
-        </div>
-      </b-row>
-    </b-col>
-    <b-col>
-      <b-row class="fundo" align-h="center">
-        <div class="timer">Pontos = {{ this.pontuacao }}</div>
-      </b-row>
-    </b-col>
     <b-modal
-      class="desafio-modal"
-      ref="desafio-modal"
-      hide-footer
-      title="Qual a alternativa correta?"
+        ref="desafio-modal"
+        class="desafio-modal"
+        hide-footer
+        hide-header-close="true"
+        no-close-on-backdrop="true"
+        no-close-on-esc="true"
+        title="Qual a alternativa correta?"
     >
       <b-row align-h="center" class="linha-modal">
         <div class="d-block text-center">
@@ -105,12 +116,13 @@
         <div class="text-center">
           <b-form-group class="form">
             <b-form-radio
-              v-for="(resposta, indice) in respostas"
-              :key="resposta.id"
-              class="radios"
-              v-model="selected"
-              :value="resposta.id"
-              >{{ indice + 1 }}) {{ resposta.answer }}</b-form-radio
+                v-for="(resposta, indice) in respostas"
+                :key="resposta.id"
+                v-model="selected"
+                :value="resposta.id"
+                class="radios"
+            >{{ indice + 1 }}) {{ resposta.answer }}
+            </b-form-radio
             >
           </b-form-group>
         </div>
@@ -121,7 +133,8 @@
             class="d-block text-center"
             variant="success"
             @click="hideModal"
-          >Responder</b-button
+        >Responder
+        </b-button
         >
       </b-row>
     </b-modal>
@@ -134,8 +147,8 @@ import {baseApiUrl} from '@/global';
 import axios from 'axios';
 
 export default {
-  name: "Jogo",
-  data: function () {
+  name: 'Jogo',
+  data: function() {
     return {
       carregando: false,
       desafiou: false,
@@ -145,8 +158,8 @@ export default {
       erros: [],
       numErros: 0,
       palavra: null,
-      selected: "",
-      desafio: "",
+      selected: '',
+      desafio: '',
       respostas: [],
       displayTime: 60,
       pontuacao: 0,
@@ -173,7 +186,7 @@ export default {
         const url = `${baseApiUrl}/api/game/word/` + categoria;
         axios.get(url).then((res) => {
           this.alfabeto = [...Array(26)].map((_, y) =>
-            String.fromCharCode(y + 65)
+              String.fromCharCode(y + 65),
           );
           this.numErros = 0;
           this.erros = [];
@@ -190,7 +203,7 @@ export default {
       this.carregando = true;
 
       const url = `${baseApiUrl}/api/game/letter`;
-      const { data } = await axios.post(url, {
+      const {data} = await axios.post(url, {
         id: this.palavra,
         letter: letra,
       });
@@ -233,11 +246,11 @@ export default {
         this.desafio = res.data.question.question;
         this.respostas = res.data.answers;
       });
-      this.$refs["desafio-modal"].show();
+      this.$refs['desafio-modal'].show();
     },
     hideModal() {
       const url = `${baseApiUrl}/api/game/question/answer`;
-      axios.post(url, { id: this.selected }).then((res) => {
+      axios.post(url, {id: this.selected}).then((res) => {
         if (res.data) {
           this.numErros = this.numErros - 1;
           this.displayTime = 60;
@@ -261,17 +274,6 @@ export default {
 </script>
 
 <style>
-@font-face {
-  font-family: fontDalek;
-  src: url("../assets/fonts/DALEKPINPOINTBOLD.TTF");
-}
-.back-jogo {
-  background-color: white;
-  border-radius: 10px;
-  width: 180%;
-  height: 100%;
-  display: grid;
-}
 .palavra div {
   display: inline-block;
   align-items: center;
@@ -283,18 +285,20 @@ export default {
   padding-bottom: 0px;
   margin-bottom: 50px;
 }
+
 .letras {
   display: inline-block;
   align-items: center;
   text-align: center;
   font-size: 20px;
   margin-bottom: 0px;
-  font-family: fontDalek;
 }
+
 .opcoes {
   display: inline-block;
   margin: 5px;
 }
+
 .alfabeto {
   display: inline-block;
   align-items: center;
@@ -302,36 +306,35 @@ export default {
   font-size: 20px;
   margin: 5px;
 }
+
 .botao {
   background-color: orange;
   margin: 5px;
 }
+
 .topo {
   margin-bottom: 0px;
 }
+
 .letras-erradas {
   display: inline-block;
   font-size: 20px;
-  font-family: fontDalek;
   margin-right: 19px;
   text-decoration: line-through;
   color: red;
 }
+
 .fundo {
   margin-top: 30px;
 }
+
 .corpo {
   position: relative;
   left: 145px;
   margin-top: -50px;
 }
-.box-timer {
-  display: grid;
-  align-items: center;
-  text-align: center;
-}
+
 .timer {
-  font-family: fontDalek;
   padding: 5px;
   display: grid;
   align-items: center;
@@ -345,9 +348,11 @@ export default {
   align-items: center;
   text-align: center;
 }
+
 .bt-modal {
   margin: 20px;
 }
+
 .radios {
   display: inline;
   align-items: center;

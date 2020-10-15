@@ -1,4 +1,18 @@
 $primary: #ff4701 !default;
+$secondary: #fea500 !default;
 
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
+
+@font-face {
+  font-family: fontDalek;
+  src: url("./fonts/DALEKPINPOINTBOLD.TTF");
+}
+
+* {
+  font-family: fontDalek, monospace;
+}
+
+html, body {
+  height: 100%;
+}
