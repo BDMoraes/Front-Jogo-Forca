@@ -85,6 +85,11 @@
         </div>
       </b-row>
     </b-col>
+    <b-col>
+      <b-row class="fundo" align-h="center">
+        <div class="timer">Pontos = {{ this.pontuacao }}</div>
+      </b-row>
+    </b-col>
     <b-modal
       class="desafio-modal"
       ref="desafio-modal"
@@ -145,37 +150,41 @@ export default {
       respostas: [],
       displayTime: 60,
       pontuacao: 0,
+      contador: null,
+      jogadas: 0,
     };
   },
   methods: {
     contadorTempo() {
       if (this.displayTime > 0) {
-        setTimeout(() => {
+        this.contador = setTimeout(() => {
           this.displayTime -= 1;
           this.contadorTempo();
         }, 1000);
       } else {
-        // if(this.desafiou == true){
-        //    this.$router.push({path: '/Final/' + this.pontuacao})
-        // }
-        console.log("teste");
+        this.$router.push({ path: "/Final/" + this.pontuacao });
       }
     },
     loadPalavra() {
-      this.carregando = true;
-      const categoria = this.$route.params.categoria;
-      const url = `${baseApiUrl}/api/game/word/` + categoria;
-      axios.get(url).then((res) => {
-        this.alfabeto = [...Array(26)].map((_, y) =>
-          String.fromCharCode(y + 65)
-        );
-        this.numErros = 0;
-        this.erros = [];
-        this.displayTime = 60;
-        this.letras = new Array(res.data.data.size);
-        this.palavra = res.data.data.id;
-      });
-      this.carregando = false;
+      if (this.jogadas <= 15) {
+        this.jogadas += 1;
+        this.carregando = true;
+        const categoria = this.$route.params.categoria;
+        const url = `${baseApiUrl}/api/game/word/` + categoria;
+        axios.get(url).then((res) => {
+          this.alfabeto = [...Array(26)].map((_, y) =>
+            String.fromCharCode(y + 65)
+          );
+          this.numErros = 0;
+          this.erros = [];
+          this.displayTime = 60;
+          this.letras = new Array(res.data.data.size);
+          this.palavra = res.data.data.id;
+        });
+        this.carregando = false;
+      } else {
+        this.$router.push({ path: "/Final/" + this.pontuacao });
+      }
     },
     async validar(letra) {
       this.carregando = true;
@@ -218,7 +227,7 @@ export default {
       this.carregando = false;
     },
     showModal() {
-      this.displayTime = 0;
+      clearTimeout(this.contador);
       const url = `${baseApiUrl}/api/game/question`;
       axios.get(url).then((res) => {
         this.desafio = res.data.question.question;
@@ -232,6 +241,7 @@ export default {
         if (res.data) {
           this.numErros = this.numErros - 1;
           this.displayTime = 60;
+          clearTimeout(this.contador);
           this.contadorTempo();
         } else {
           this.$router.push({ path: "/Final/" + this.pontuacao });
