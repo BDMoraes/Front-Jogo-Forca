@@ -1,16 +1,22 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
-export const userKey = '__admin_user'
 export const baseApiUrl = 'https://jogo-da-forca.herokuapp.com';
 
 export function showError(e) {
-    if (e && e.response && e.response.data) {
-        Vue.toasted.global.defaultError({ msg: e.response.data })
+    const data = e?.response?.data;
+
+    if (data?.errors) {
+        const errors = data.errors;
+        const message = errors[Object.keys(errors).shift()].shift();
+
+        Vue.toasted.show(message);
+    } else if (data?.message) {
+        Vue.toasted.show(data.message);
     } else if (typeof e === 'string') {
-        Vue.toasted.global.defaultError({ msg: e })
+        Vue.toasted.show(e);
     } else {
-        Vue.toasted.global.defaultError()
+        Vue.toasted.show('Erro inesperado.');
     }
 }
 
-export default { baseApiUrl, showError, userKey }
+export default {baseApiUrl, showError};

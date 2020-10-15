@@ -18,15 +18,15 @@
       <b-button variant="danger" v-if="mode === 'remove'" @click="remove"
         >Excluir</b-button
       >
-      <b-button class="ml-2" @click="reset">Cancelar</b-button>
+      <b-button class="ml-2" variant="danger" @click="reset">Cancelar</b-button>
     </b-form>
     <hr />
     <b-table hover striped :items="categorias" :fields="fields">
       <template slot="cell(actions)" slot-scope="data">
         <b-button
-          variant="warning"
-          @click="loadCategoria(data.item)"
-          class="espaco_bts"
+            variant="primary"
+            @click="loadCategoria(data.item)"
+            class="espaco_bts"
         >
           <i class="fa fa-pencil" color="red"></i>
         </b-button>
@@ -39,18 +39,19 @@
 </template>
 
 <script>
-import { baseApiUrl, showError } from "@/global";
+import {baseApiUrl, showError} from '@/global';
 
-import axios from "axios";
+import axios from 'axios';
+
 export default {
-  name: "AdminCategorias",
-  data: function () {
+  name: 'AdminCategorias',
+  data: function() {
     return {
-      mode: "save",
+      mode: 'save',
       categoria: {},
       categorias: [],
       fields: [
-        { key: "id", label: "Código", sortable: true },
+        {key: 'id', label: 'Código', sortable: true},
         { key: "name", label: "Nome", sortable: true },
         { key: "actions", label: "Ações" },
       ],

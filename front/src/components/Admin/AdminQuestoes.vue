@@ -54,9 +54,9 @@
     <b-table hover striped :items="questaos" :fields="fields">
       <template slot="cell(actions)" slot-scope="data">
         <b-button
-          variant="warning"
-          @click="loadQuestao(data.item)"
-          class="mr-2"
+            variant="primary"
+            @click="loadQuestao(data.item)"
+            class="mr-2"
         >
           <i class="fa fa-pencil"></i>
         </b-button>
@@ -69,14 +69,15 @@
 </template>
 
 <script>
-import { baseApiUrl, showError } from "@/global";
+import {baseApiUrl, showError} from '@/global';
 
-import axios from "axios";
+import axios from 'axios';
+
 export default {
-  name: "AdminQuestoes",
-  data: function () {
+  name: 'AdminQuestoes',
+  data: function() {
     return {
-      mode: "save",
+      mode: 'save',
       questao: {
         resp: {},
         alt1: {},
@@ -163,6 +164,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

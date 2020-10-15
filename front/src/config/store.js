@@ -1,47 +1,42 @@
-import axios from 'axios'
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { userKey } from '../global'
+import axios from 'axios';
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-const setUser = (state, user) => {
-    state.user = user
-    if (user) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`
-        state.isMenuVisible = true
-    } else {
-        delete axios.defaults.headers.common['Authorization']
-        state.isMenuVisible = false
-    }
-}
+const login = (accessToken, state) => {
+  if (state) {
+    state.accessToken = accessToken;
+    state.authenticated = true;
+  }
+
+  if (accessToken) {
+    localStorage.setItem('access_token', accessToken);
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  }
+};
+
+const accessToken = localStorage.getItem('access_token');
+
+login(accessToken);
 
 export default new Vuex.Store({
-    state: {
-        isMenuVisible: false,
-        user: null
+  state: {
+    accessToken,
+    authenticated: accessToken !== null,
+  },
+  mutations: {
+    login(state, accessToken) {
+      login(accessToken, state);
     },
-    mutations: {
-        toggleMenu(state, isVisible) {
-            if (!state.user) {
-                state.isMenuVisible = false
-                return
-            }
+    logout(state) {
+      state.accessToken = null;
+      state.authenticated = false;
 
-            if (isVisible == undefined) {
-                state.isMenuVisible = !state.isMenuVisible
-            } else {
-                state.isMenuVisible = isVisible
-            }
-        },
-        setUser(state, user) {
-            state.user = user
-            setUser(state, user)
-        },
-        init() {
-            const user = JSON.parse(localStorage.getItem(userKey));
-            setUser(this.state, user);
-            console.log(user.access_token);
-        }
-    }
-})
+      localStorage.removeItem('access_token');
+
+      delete axios.defaults.headers.common['Authorization'];
+    },
+  },
+});

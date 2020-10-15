@@ -2,23 +2,23 @@ import Vue from 'vue';
 import App from './App.vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
 
-import 'bootstrap';
 import './assets/app.scss';
-import './config/bootstrap';
 import 'font-awesome/css/font-awesome.css';
 
 import store from './config/store';
 import './config/msg';
-import router from './config/router';
+import router from './router';
 
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 Vue.use(VueAxios, axios);
 
+Vue.config.productionTip = false;
+
 new Vue({
-  beforeCreate() {
-    this.$store.commit("init");
-  },
   store,
   router,
   render: h => h(App),
-}).$mount('#app')
+}).$mount('#app');
