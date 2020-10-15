@@ -186,6 +186,7 @@ export default {
         letter: letra,
       });
       if (data.length > 0) {
+        this.pontuacao += 10;
         const letras = [...this.letras];
         data.forEach((posicao) => {
           letras[posicao] = letra;
