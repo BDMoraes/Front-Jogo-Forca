@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     loadCategorias() {
-      const url = `${baseApiUrl}/api/category`;
+      const url = `${baseApiUrl}/api/game/category`;
       axios.get(url).then((res) => {
         this.categorias = [
           ...this.categorias, ...res.data.data.map((categoria) => {

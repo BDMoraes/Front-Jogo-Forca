@@ -1,6 +1,6 @@
 <template>
   <div class="palavra-admin">
-    <b-form>
+    <b-form @submit="save">
       <input id="palavra-id" v-model="palavra.id" type="hidden"/>
       <b-form-group label="Nome:" label-for="palavra-name">
         <b-form-input
@@ -9,24 +9,23 @@
             :readonly="mode === 'remove'"
             placeholder="Informe a Palavra..."
             required
-            type="text"
         />
       </b-form-group>
       <b-form-group
           v-if="mode === 'save'"
           label="Categoria:"
-          label-for="palavra.category.name"
+          label-for="palavra-categoria"
       >
         <b-form-select
             id="palavra-categoria"
-            v-model="palavra.category.id"
+            v-model="categoria"
             :options="categorias"
+            required
         />
       </b-form-group>
-      <b-button variant="primary" v-if="mode === 'save'" @click="save"
-      >Salvar
-      </b-button
-      >
+      <b-button v-if="mode === 'save'" type="submit" variant="primary">
+        Salvar
+      </b-button>
       <b-button variant="danger" v-if="mode === 'remove'" @click="remove"
       >Excluir
       </b-button
@@ -60,11 +59,8 @@ export default {
   data: function() {
     return {
       mode: 'save',
-      palavra: {
-        category: {
-          id: null,
-        },
-      },
+      palavra: {},
+      categoria: null,
       palavras: [],
       categorias: [
         {value: null, text: 'Selecione'},
@@ -99,15 +95,19 @@ export default {
     reset() {
       this.mode = 'save';
       this.palavra = {};
-      this.loadPalavras();
+      this.categoria = null;
     },
-    save() {
+    save(e) {
+      e.preventDefault();
+
       const method = this.palavra.id ? 'put' : 'post';
       const id = this.palavra.id
           ? `api/word/${this.palavra.id}`
-          : 'api/category/' + this.palavra.category.id + '/word';
-      axios[method](`${baseApiUrl}/${id}`, this.palavra).then(() => {
-        this.loadPalavras();
+          : 'api/category/' + this.categoria + '/word';
+      axios[method](`${baseApiUrl}/${id}`, this.palavra).then(response => {
+        const palavra = response.data.data;
+
+        this.palavras = [...this.palavras, {...palavra, value: palavra.id}];
         this.$toasted.global.defaultSuccess();
         this.reset();
       }).catch(showError);
@@ -117,11 +117,13 @@ export default {
       axios.delete(`${baseApiUrl}/api/word/${id}`).then(() => {
         this.$toasted.global.defaultSuccess();
         this.reset();
+        this.loadPalavras();
       }).catch(showError);
     },
     loadPalavra(palavra, mode = 'save') {
       this.mode = mode;
       this.palavra = {...palavra};
+      this.categoria = palavra.category.id;
     },
   },
   mounted() {

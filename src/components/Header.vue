@@ -1,16 +1,6 @@
 <template>
-  <b-navbar fixed="top" type="dark" variant="primary">
-    <b-navbar-brand href="/">{{ title }}</b-navbar-brand>
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown v-if="authenticated" right text="Administrador">
-          <b-dropdown-item @click="administracao">Dashboard</b-dropdown-item>
-          <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item @click="logout">Sair</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-    </b-collapse>
+  <b-navbar class="d-flex justify-content-center navbar-header" fixed="top" type="dark" variant="primary">
+    <b-navbar-brand class="title-header" href="/">{{ title }}</b-navbar-brand>
   </b-navbar>
 </template>
 
@@ -36,3 +26,14 @@ export default {
   },
 };
 </script>
+<style>
+.title-header {
+  font-size: 2rem !important;
+  color: black !important;
+}
+
+.navbar-header {
+  background: rgb(255, 71, 1);
+  background: linear-gradient(90deg, rgba(255, 71, 1, 1) 0%, rgba(254, 165, 0, 1) 100%);
+}
+</style>

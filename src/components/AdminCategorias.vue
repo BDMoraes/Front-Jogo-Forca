@@ -1,26 +1,27 @@
 <template>
   <div class="categoria-admin">
-    <b-form>
-      <input id="categoria-id" type="hidden" v-model="categoria.id" />
+    <b-form @submit="save">
+      <input id="categoria-id" v-model="categoria.id" type="hidden"/>
       <b-form-group label="Nome:" label-for="categoria-name">
         <b-form-input
-          id="categoria-name"
-          type="text"
-          v-model="categoria.name"
-          required
-          :readonly="mode === 'remove'"
-          placeholder="Informe o Nome da Categoria..."
+            id="categoria-name"
+            v-model="categoria.name"
+            :readonly="mode === 'remove'"
+            placeholder="Informe o Nome da Categoria..."
+            required
+            type="text"
         />
       </b-form-group>
-      <b-button variant="primary" v-if="mode === 'save'" @click="save"
-        >Salvar</b-button
-      >
+      <b-button v-if="mode === 'save'" type="submit" variant="primary">
+        Salvar
+      </b-button>
       <b-button variant="danger" v-if="mode === 'remove'" @click="remove"
-        >Excluir</b-button
+      >Excluir
+      </b-button
       >
       <b-button class="ml-2" variant="danger" @click="reset">Cancelar</b-button>
     </b-form>
-    <hr />
+    <hr/>
     <b-table hover striped :items="categorias" :fields="fields">
       <template slot="cell(actions)" slot-scope="data">
         <b-button
@@ -52,8 +53,8 @@ export default {
       categorias: [],
       fields: [
         {key: 'id', label: 'Código', sortable: true},
-        { key: "name", label: "Nome", sortable: true },
-        { key: "actions", label: "Ações" },
+        {key: 'name', label: 'Nome', sortable: true},
+        {key: 'actions', label: 'Ações'},
       ],
     };
   },
@@ -62,38 +63,38 @@ export default {
       const url = `${baseApiUrl}/api/category`;
       axios.get(url).then((res) => {
         this.categorias = res.data.data.map((categoria) => {
-          return { ...categoria, value: categoria.id };
+          return {...categoria, value: categoria.id};
         });
       });
     },
     reset() {
-      this.mode = "save";
+      this.mode = 'save';
       this.categoria = {};
-      this.loadCategorias();
     },
-    save() {
-      const method = this.categoria.id ? "put" : "post";
-      const id = this.categoria.id ? `/${this.categoria.id}` : "";
-      axios[method](`${baseApiUrl}/api/category${id}`, this.categoria)
-        .then(() => {
-          this.$toasted.global.defaultSuccess();
-          this.reset();
-        })
-        .catch(showError);
+    save(e) {
+      e.preventDefault();
+
+      const method = this.categoria.id ? 'put' : 'post';
+      const id = this.categoria.id ? `/${this.categoria.id}` : '';
+      axios[method](`${baseApiUrl}/api/category${id}`, this.categoria).then(response => {
+        const categoria = response.data.data;
+
+        this.categorias = [...this.categorias, {...categoria, value: categoria.id}];
+        this.$toasted.global.defaultSuccess();
+        this.reset();
+      }).catch(showError);
     },
     remove() {
       const id = this.categoria.id;
-      axios
-        .delete(`${baseApiUrl}/api/category/${id}`)
-        .then(() => {
-          this.$toasted.global.defaultSuccess();
-          this.reset();
-        })
-        .catch(showError);
+      axios.delete(`${baseApiUrl}/api/category/${id}`).then(() => {
+        this.$toasted.global.defaultSuccess();
+        this.reset();
+        this.loadCategorias();
+      }).catch(showError);
     },
-    loadCategoria(categoria, mode = "save") {
+    loadCategoria(categoria, mode = 'save') {
       this.mode = mode;
-      this.categoria = { ...categoria };
+      this.categoria = {...categoria};
     },
   },
   mounted() {
