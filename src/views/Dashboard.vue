@@ -9,13 +9,13 @@
       <div class="admin-pages-tabs">
         <b-card no-body>
           <b-tabs card>
-            <b-tab title="Categorias" active>
-              <AdminCategorias />
+            <b-tab active lazy title="Categorias">
+              <AdminCategorias/>
             </b-tab>
-            <b-tab title="Palavras">
+            <b-tab lazy title="Palavras">
               <AdminPalavras/>
             </b-tab>
-            <b-tab title="Questões">
+            <b-tab lazy title="Questões">
               <AdminQuestoes/>
             </b-tab>
           </b-tabs>
