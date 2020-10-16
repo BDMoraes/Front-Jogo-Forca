@@ -44,7 +44,7 @@ export default {
         const url = `${baseApiUrl}/api/ranking`;
 
         await axios.post(url, {name: this.jogador, score: pontos});
-        await this.$router.push({path: '/'});
+        await this.$router.push({name: 'Home'});
       } catch (e) {
         showError(e);
       }
