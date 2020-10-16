@@ -18,7 +18,7 @@
           <b-row>
             <b-col>
               <b-row align-h="center" class="fundo">
-                <div class="timer">Pontos = {{ this.pontuacao }}</div>
+                <div class="timer">Pontos = {{ this.pontuacaoLetras + this.pontuacaoPalavras }}</div>
               </b-row>
             </b-col>
           </b-row>
@@ -163,6 +163,8 @@ export default {
       respostas: [],
       displayTime: 60,
       pontuacao: 0,
+      pontuacaoLetras: 0,
+      pontuacaoPalavras: 0,
       contador: null,
       jogadas: 0,
     };
@@ -179,6 +181,7 @@ export default {
           this.contadorTempo();
         }, 1000);
       } else {
+        this.pontuacao = this.pontuacaoPalavras + this.pontuacaoLetras;
         this.final();
       }
     },
@@ -186,6 +189,8 @@ export default {
       if (this.jogadas <= 15) {
         this.jogadas += 1;
         this.carregando = true;
+        this.pontuacaoLetras = 0;
+
         const categoria = this.$route.params.categoria;
         const url = `${baseApiUrl}/api/game/word/` + categoria;
         axios.get(url).then((res) => {
@@ -200,6 +205,7 @@ export default {
         });
         this.carregando = false;
       } else {
+        this.pontuacao = this.pontuacaoPalavras;
         this.final();
       }
     },
@@ -207,29 +213,37 @@ export default {
       this.carregando = true;
 
       const url = `${baseApiUrl}/api/game/letter`;
+
       const {data} = await axios.post(url, {
         id: this.palavra,
         letter: letra,
       });
+
       if (data.length > 0) {
-        this.pontuacao += 10;
+        this.pontuacaoLetras += 10;
+
         const letras = [...this.letras];
+
         data.forEach((posicao) => {
           letras[posicao] = letra;
         });
+
         this.letras = letras;
+
         if (this.letras.filter(Boolean).length === this.letras.length) {
-          this.pontuacao += 100;
+          this.pontuacaoPalavras += 100;
           this.loadPalavra();
         }
       } else {
         this.erros = [...this.erros, letra];
         this.numErros = this.numErros + 1;
-        if (this.numErros == 6) {
+
+        if (this.numErros === 6) {
           if (!this.desafiou) {
             this.showModal();
             this.desafiou = true;
           } else {
+            this.pontuacao = this.pontuacaoPalavras + this.pontuacaoLetras;
             this.final();
           }
         }
@@ -245,24 +259,31 @@ export default {
     },
     showModal() {
       clearTimeout(this.contador);
+
       const url = `${baseApiUrl}/api/game/question`;
+
       axios.get(url).then((res) => {
         this.desafio = res.data.question.question;
         this.respostas = res.data.answers;
       });
+
       this.$refs['desafio-modal'].show();
     },
     hideModal() {
       const url = `${baseApiUrl}/api/game/question/answer`;
+
       axios.post(url, {id: this.selected}).then((res) => {
         if (res.data) {
+          clearTimeout(this.contador);
+
           this.numErros = this.numErros - 1;
           this.displayTime = 60;
-          clearTimeout(this.contador);
           this.contadorTempo();
         } else {
+          this.pontuacao = this.pontuacaoPalavras + this.pontuacaoLetras;
           this.final();
         }
+
         this.$refs['desafio-modal'].hide();
       });
     },
