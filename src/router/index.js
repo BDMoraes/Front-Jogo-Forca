@@ -28,7 +28,7 @@ const routes = [
   },
   {
     name: 'Final',
-    path: '/final/:pontuacao',
+    path: '/final',
     component: Final,
   },
   {

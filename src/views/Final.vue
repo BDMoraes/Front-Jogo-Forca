@@ -31,14 +31,13 @@ export default {
     };
   },
   methods: {
-    finalizar() {
-      const pontos = this.$route.params.pontuacao;
+    async finalizar() {
+      const pontos = this.$store.state.pontuacao;
       const url = `${baseApiUrl}/api/ranking`;
-      axios.post(url, {name: this.jogador, score: pontos});
-      this.$router.push({path: '/'});
+
+      await axios.post(url, {name: this.jogador, score: pontos});
+      await this.$router.push({path: '/'});
     },
-  },
-  mounted() {
-  },
+  }
 };
 </script>

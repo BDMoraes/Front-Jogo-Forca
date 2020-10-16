@@ -1,7 +1,6 @@
 <template>
   <div class="categoria-admin">
     <b-form @submit="save">
-      <input id="categoria-id" v-model="categoria.id" type="hidden"/>
       <b-form-group label="Nome:" label-for="categoria-name">
         <b-form-input
             id="categoria-name"

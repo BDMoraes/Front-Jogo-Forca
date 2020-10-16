@@ -168,6 +168,10 @@ export default {
     };
   },
   methods: {
+    final() {
+      this.$store.commit('setPontuacao', this.pontuacao);
+      this.$router.push({path: '/final'});
+    },
     contadorTempo() {
       if (this.displayTime > 0) {
         this.contador = setTimeout(() => {
@@ -175,7 +179,7 @@ export default {
           this.contadorTempo();
         }, 1000);
       } else {
-        this.$router.push({path: '/final/' + this.pontuacao});
+        this.final();
       }
     },
     loadPalavra() {
@@ -196,7 +200,7 @@ export default {
         });
         this.carregando = false;
       } else {
-        this.$router.push({path: '/final/' + this.pontuacao});
+        this.final();
       }
     },
     async validar(letra) {
@@ -226,7 +230,7 @@ export default {
             this.showModal();
             this.desafiou = true;
           } else {
-            this.$router.push({path: '/final/' + this.pontuacao});
+            this.final();
           }
         }
       }
@@ -257,7 +261,7 @@ export default {
           clearTimeout(this.contador);
           this.contadorTempo();
         } else {
-          this.$router.push({path: '/final/' + this.pontuacao});
+          this.final();
         }
         this.$refs['desafio-modal'].hide();
       });

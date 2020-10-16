@@ -1,7 +1,6 @@
 <template>
   <div class="palavra-admin">
     <b-form @submit="save">
-      <input id="palavra-id" v-model="palavra.id" type="hidden"/>
       <b-form-group label="Nome:" label-for="palavra-name">
         <b-form-input
             id="palavra-name"

@@ -25,6 +25,7 @@ export default new Vuex.Store({
   state: {
     accessToken,
     authenticated: accessToken !== null,
+    pontuacao: 0,
   },
   mutations: {
     login(state, accessToken) {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
       localStorage.removeItem('access_token');
 
       delete axios.defaults.headers.common['Authorization'];
+    },
+    setPontuacao(state, pontuacao) {
+      state.pontuacao = pontuacao;
     },
   },
 });
