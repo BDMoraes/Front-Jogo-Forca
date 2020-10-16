@@ -73,12 +73,24 @@ export default {
     save(e) {
       e.preventDefault();
 
-      const method = this.categoria.id ? 'put' : 'post';
-      const id = this.categoria.id ? `/${this.categoria.id}` : '';
+      const edicao = !!this.categoria.id;
+      const method = edicao ? 'put' : 'post';
+      const id = edicao ? `/${this.categoria.id}` : '';
+
       axios[method](`${baseApiUrl}/api/category${id}`, this.categoria).then(response => {
         const categoria = response.data.data;
 
-        this.categorias = [...this.categorias, {...categoria, value: categoria.id}];
+        if (edicao) {
+          const index = this.categorias.findIndex(categoria => categoria.id === this.categoria.id);
+
+          const categorias = this.categorias;
+          categorias[index] = categoria;
+
+          this.categorias = [...categorias];
+        } else {
+          this.categorias = [{...categoria, value: categoria.id}, ...this.categorias];
+        }
+
         this.$toasted.global.defaultSuccess();
         this.reset();
       }).catch(showError);
@@ -88,7 +100,13 @@ export default {
       axios.delete(`${baseApiUrl}/api/category/${id}`).then(() => {
         this.$toasted.global.defaultSuccess();
         this.reset();
-        this.loadCategorias();
+
+        const index = this.categorias.findIndex(categoria => categoria.id === id);
+
+        const categorias = this.categorias;
+        categorias.splice(index, 1);
+
+        this.categorias = [...categorias];
       }).catch(showError);
     },
     loadCategoria(categoria, mode = 'save') {

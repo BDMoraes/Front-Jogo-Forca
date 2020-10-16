@@ -99,14 +99,28 @@ export default {
     save(e) {
       e.preventDefault();
 
-      const method = this.palavra.id ? 'put' : 'post';
-      const id = this.palavra.id
+      this.palavra.category_id = this.categoria;
+
+      const edicao = !!this.palavra.id;
+      const method = edicao ? 'put' : 'post';
+      const id = edicao
           ? `api/word/${this.palavra.id}`
           : 'api/category/' + this.categoria + '/word';
+
       axios[method](`${baseApiUrl}/${id}`, this.palavra).then(response => {
         const palavra = response.data.data;
 
-        this.palavras = [...this.palavras, {...palavra, value: palavra.id}];
+        if (edicao) {
+          const index = this.palavras.findIndex(palavra => palavra.id === this.palavra.id);
+
+          const palavras = this.palavras;
+          palavras[index] = palavra;
+
+          this.palavras = [...palavras];
+        } else {
+          this.palavras = [{...palavra, value: palavra.id}, ...this.palavras];
+        }
+
         this.$toasted.global.defaultSuccess();
         this.reset();
       }).catch(showError);
@@ -116,7 +130,13 @@ export default {
       axios.delete(`${baseApiUrl}/api/word/${id}`).then(() => {
         this.$toasted.global.defaultSuccess();
         this.reset();
-        this.loadPalavras();
+
+        const index = this.palavras.findIndex(palavra => palavra.id === id);
+
+        const palavras = this.palavras;
+        palavras.splice(index, 1);
+
+        this.palavras = [...palavras];
       }).catch(showError);
     },
     loadPalavra(palavra, mode = 'save') {

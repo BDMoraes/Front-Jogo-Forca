@@ -115,8 +115,9 @@ export default {
       const alt1 = this.questao.alt1;
       const alt2 = this.questao.alt2;
 
-      const method = this.questao.id ? 'put' : 'post';
-      const id = this.questao.id ? `/${this.questao.id}` : '';
+      const edicao = !!this.questao.id;
+      const method = edicao ? 'put' : 'post';
+      const id = edicao ? `/${this.questao.id}` : '';
 
       axios[method](`${baseApiUrl}/api/question${id}`, this.questao).then((response) => {
         this.$toasted.global.defaultSuccess();
@@ -131,7 +132,16 @@ export default {
         this.saveResposta(questao, alt1);
         this.saveResposta(questao, alt2);
 
-        this.questoes = [...this.questoes, {...questao, value: questao.id}];
+        if (edicao) {
+          const index = this.questoes.findIndex(questao => questao.id === this.questao.id);
+
+          const questoes = this.questoes;
+          questoes[index] = questao;
+
+          this.questoes = [...questoes];
+        } else {
+          this.questoes = [{...questao, value: questao.id}, ...this.questoes];
+        }
       }).catch(showError);
     },
     saveResposta(questao, resposta) {
@@ -144,10 +154,17 @@ export default {
     },
     remove() {
       const id = this.questao.id;
+
       axios.delete(`${baseApiUrl}/api/question/${id}`).then(() => {
         this.$toasted.global.defaultSuccess();
         this.reset();
-        this.loadQuestoes();
+
+        const index = this.questoes.findIndex(questao => questao.id === id);
+
+        const questoes = this.questoes;
+        questoes.splice(index, 1);
+
+        this.questoes = [...questoes];
       }).catch(showError);
     },
     async loadQuestao(questao, mode = 'save') {
