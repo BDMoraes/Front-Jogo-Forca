@@ -38,7 +38,9 @@ export default {
     };
   },
   methods: {
-    async finalizar() {
+    async finalizar(e) {
+      e.preventDefault();
+
       try {
         const pontos = this.$store.state.pontuacao;
         const url = `${baseApiUrl}/api/ranking`;
