@@ -44,7 +44,7 @@
       <b-button v-if="mode === 'save'" type="submit" variant="primary">
         Salvar
       </b-button>
-      <b-button variant="danger" v-if="mode === 'remove'" @click="remove"
+      <b-button variant="danger" v-if="mode === 'remove'" @click="remove()"
       >Excluir
       </b-button
       >
