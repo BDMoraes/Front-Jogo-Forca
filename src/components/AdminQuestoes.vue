@@ -119,18 +119,26 @@ export default {
       const method = edicao ? 'put' : 'post';
       const id = edicao ? `/${this.questao.id}` : '';
 
-      axios[method](`${baseApiUrl}/api/question${id}`, this.questao).then((response) => {
-        this.$toasted.global.defaultSuccess();
-        this.reset();
-
+      axios[method](`${baseApiUrl}/api/question${id}`, this.questao).then(async response => {
         const questao = response.data.data;
 
-        this.saveResposta(questao, {
-          ...resp,
-          correct: true,
-        });
-        this.saveResposta(questao, alt1);
-        this.saveResposta(questao, alt2);
+        try {
+          await Promise.all([
+            this.saveResposta(questao, {...resp, correct: true}),
+            this.saveResposta(questao, alt1),
+            this.saveResposta(questao, alt2),
+          ]);
+        } catch (e) {
+          showError(e);
+
+          this.remove(questao.id, true);
+
+          return;
+        }
+
+        this.reset();
+
+        this.$toasted.global.defaultSuccess();
 
         if (edicao) {
           const index = this.questoes.findIndex(questao => questao.id === this.questao.id);
@@ -144,38 +152,38 @@ export default {
         }
       }).catch(showError);
     },
-    saveResposta(questao, resposta) {
+    async saveResposta(questao, resposta) {
       const method = resposta.id ? 'put' : 'post';
       const id = resposta.id
           ? `api/answer/${resposta.id}`
           : `api/question/${questao.id}/answer`;
-      axios[method](`${baseApiUrl}/${id}`, resposta);
-      this.loadQuestoes();
+
+      await axios[method](`${baseApiUrl}/${id}`, resposta);
     },
-    remove() {
-      const id = this.questao.id;
+    remove(questaoId, hidden = false) {
+      const id = questaoId ?? this.questao.id;
 
       axios.delete(`${baseApiUrl}/api/question/${id}`).then(() => {
-        this.$toasted.global.defaultSuccess();
-        this.reset();
+        if (!hidden) {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
 
-        const index = this.questoes.findIndex(questao => questao.id === id);
+          const index = this.questoes.findIndex(questao => questao.id === id);
 
-        const questoes = this.questoes;
-        questoes.splice(index, 1);
+          const questoes = this.questoes;
+          questoes.splice(index, 1);
 
-        this.questoes = [...questoes];
+          this.questoes = [...questoes];
+        }
       }).catch(showError);
     },
     async loadQuestao(questao, mode = 'save') {
       this.mode = mode;
-      const response = await axios.get(
-          `${baseApiUrl}/api/question/${questao.id}/answer`,
-      );
-      questao.resp = response.data.data.find((resposta) => resposta.correct) ?? {};
-      const respostas = response.data.data.filter(
-          (resposta) => !resposta.correct,
-      );
+
+      const response = await axios.get(`${baseApiUrl}/api/question/${questao.id}/answer`);
+      const respostas = response.data.data.filter(resposta => !resposta.correct);
+
+      questao.resp = response.data.data.find(resposta => resposta.correct) ?? {};
       questao.alt1 = respostas.shift() ?? {};
       questao.alt2 = respostas.shift() ?? {};
 
